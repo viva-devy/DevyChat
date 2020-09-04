@@ -1,0 +1,744 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 51;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		192B818DBA90980F85B514D3 /* Pods_DevyTalk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DFA043F0DB8B76134F0E1C5 /* Pods_DevyTalk.framework */; };
+		313984D925014F0500465679 /* LastMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 313984D825014F0500465679 /* LastMessage.swift */; };
+		313984DB250204DE00465679 /* CustomInputBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 313984DA250204DE00465679 /* CustomInputBar.swift */; };
+		3142162924F513A100E7E0C9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3142162824F513A100E7E0C9 /* GoogleService-Info.plist */; };
+		3142162B24F558A800E7E0C9 /* DatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3142162A24F558A800E7E0C9 /* DatabaseManager.swift */; };
+		3142162D24F6172F00E7E0C9 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3142162C24F6172F00E7E0C9 /* Message.swift */; };
+		3142162F24F61F6500E7E0C9 /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3142162E24F61F6500E7E0C9 /* StorageManager.swift */; };
+		3142163324F74A5300E7E0C9 /* Conversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3142163224F74A5300E7E0C9 /* Conversation.swift */; };
+		3142163524F7E0FC00E7E0C9 /* SearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3142163424F7E0FC00E7E0C9 /* SearchResult.swift */; };
+		3142163724F8033E00E7E0C9 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3142163624F8033E00E7E0C9 /* Date.swift */; };
+		3152DF5724F4F2FC00FCF86D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3152DF5624F4F2FC00FCF86D /* AppDelegate.swift */; };
+		3152DF5924F4F2FC00FCF86D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3152DF5824F4F2FC00FCF86D /* SceneDelegate.swift */; };
+		3152DF5B24F4F2FC00FCF86D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3152DF5A24F4F2FC00FCF86D /* ViewController.swift */; };
+		3152DF6124F4F2FC00FCF86D /* DevyTalk.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3152DF5F24F4F2FC00FCF86D /* DevyTalk.xcdatamodeld */; };
+		3152DF6324F4F2FD00FCF86D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3152DF6224F4F2FD00FCF86D /* Assets.xcassets */; };
+		3152DF6624F4F2FD00FCF86D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3152DF6424F4F2FD00FCF86D /* LaunchScreen.storyboard */; };
+		3152DF6F24F4F3B500FCF86D /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3152DF6E24F4F3B500FCF86D /* TabBarViewController.swift */; };
+		3152DF7A24F4F48900FCF86D /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3152DF7924F4F48900FCF86D /* UIColor.swift */; };
+		3152DF7C24F4F49B00FCF86D /* CGFloat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3152DF7B24F4F49B00FCF86D /* CGFloat.swift */; };
+		3152DF7E24F4F4AB00FCF86D /* Int.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3152DF7D24F4F4AB00FCF86D /* Int.swift */; };
+		3152DF8024F4F4BD00FCF86D /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3152DF7F24F4F4BD00FCF86D /* Notification.swift */; };
+		3152DF8924F4F4D300FCF86D /* NanumSquareR.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3152DF8124F4F4D300FCF86D /* NanumSquareR.ttf */; };
+		3152DF8A24F4F4D300FCF86D /* BMJUA.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3152DF8224F4F4D300FCF86D /* BMJUA.ttf */; };
+		3152DF8B24F4F4D300FCF86D /* NanumSquareL.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3152DF8324F4F4D300FCF86D /* NanumSquareL.ttf */; };
+		3152DF8C24F4F4D300FCF86D /* JalnanOTF.otf in Resources */ = {isa = PBXBuildFile; fileRef = 3152DF8424F4F4D300FCF86D /* JalnanOTF.otf */; };
+		3152DF8D24F4F4D300FCF86D /* NanumSquareB.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3152DF8524F4F4D300FCF86D /* NanumSquareB.ttf */; };
+		3152DF8E24F4F4D300FCF86D /* NanumSquareEB.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3152DF8624F4F4D300FCF86D /* NanumSquareEB.ttf */; };
+		3152DF8F24F4F4D300FCF86D /* GmarketSansTTFBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3152DF8724F4F4D300FCF86D /* GmarketSansTTFBold.ttf */; };
+		3152DF9024F4F4D300FCF86D /* GmarketSansTTFMedium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3152DF8824F4F4D300FCF86D /* GmarketSansTTFMedium.ttf */; };
+		3152DF9324F4F57700FCF86D /* ConversationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3152DF9224F4F57700FCF86D /* ConversationsViewController.swift */; };
+		3152DF9524F4F58900FCF86D /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3152DF9424F4F58900FCF86D /* ProfileViewController.swift */; };
+		3152DF9724F4F5AC00FCF86D /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3152DF9624F4F5AC00FCF86D /* LoginViewController.swift */; };
+		3152DF9924F4F5C900FCF86D /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3152DF9824F4F5C900FCF86D /* RegisterViewController.swift */; };
+		3152DF9B24F4F5E300FCF86D /* ConversationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3152DF9A24F4F5E300FCF86D /* ConversationsView.swift */; };
+		3152DF9D24F4F60A00FCF86D /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3152DF9C24F4F60A00FCF86D /* ProfileView.swift */; };
+		3152DF9F24F4F63100FCF86D /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3152DF9E24F4F63100FCF86D /* LoginView.swift */; };
+		3152DFA124F4F65900FCF86D /* RegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3152DFA024F4F65900FCF86D /* RegisterView.swift */; };
+		3152DFA324F4F66B00FCF86D /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3152DFA224F4F66B00FCF86D /* ChatView.swift */; };
+		3152DFA524F4F68600FCF86D /* NewConversationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3152DFA424F4F68600FCF86D /* NewConversationsView.swift */; };
+		3152DFA724F4F6B000FCF86D /* ProfileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3152DFA624F4F6B000FCF86D /* ProfileCell.swift */; };
+		3152DFA924F4F6C300FCF86D /* ConversationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3152DFA824F4F6C300FCF86D /* ConversationCell.swift */; };
+		3152DFAB24F4F71300FCF86D /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3152DFAA24F4F71300FCF86D /* ChatViewController.swift */; };
+		3152DFAD24F4F72800FCF86D /* NewConversationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3152DFAC24F4F72800FCF86D /* NewConversationViewController.swift */; };
+		3152DFAF24F4F74100FCF86D /* PhotoViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3152DFAE24F4F74100FCF86D /* PhotoViewViewController.swift */; };
+		3152DFB124F4F74D00FCF86D /* VideoPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3152DFB024F4F74D00FCF86D /* VideoPlayerViewController.swift */; };
+		31667E3B24F8FAB500710ACD /* PhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31667E3A24F8FAB500710ACD /* PhotoView.swift */; };
+		31667E3D24F90B9000710ACD /* NewConversationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31667E3C24F90B9000710ACD /* NewConversationCell.swift */; };
+		31F8607124FCCB0E00196219 /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31F8607024FCCB0E00196219 /* UserData.swift */; };
+		31F8607324FCF52600196219 /* NewChatVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31F8607224FCF52600196219 /* NewChatVC.swift */; };
+		31F8607B24FDE73500196219 /* ChatList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31F8607A24FDE73500196219 /* ChatList.swift */; };
+		31F8607D24FE056300196219 /* ChatListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31F8607C24FE056300196219 /* ChatListVC.swift */; };
+		31F8607F24FE393F00196219 /* ChatListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31F8607E24FE393F00196219 /* ChatListView.swift */; };
+		31F8608224FE39D900196219 /* WaitingInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31F8608124FE39D900196219 /* WaitingInfoCell.swift */; };
+		31F8608424FE39ED00196219 /* BasicWaitingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31F8608324FE39ED00196219 /* BasicWaitingCell.swift */; };
+		31F8608624FE39FE00196219 /* GlobalWaitingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31F8608524FE39FE00196219 /* GlobalWaitingCell.swift */; };
+		31F8608A24FEA17B00196219 /* AppointmentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31F8608924FEA17B00196219 /* AppointmentCell.swift */; };
+		31F8608E24FF5E3C00196219 /* InfoWaitingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31F8608D24FF5E3C00196219 /* InfoWaitingCell.swift */; };
+		31F860912500ECB000196219 /* BasicMessageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31F860902500ECB000196219 /* BasicMessageModel.swift */; };
+		31F860932500EDCC00196219 /* TextMessageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31F860922500EDCC00196219 /* TextMessageModel.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		313984D825014F0500465679 /* LastMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LastMessage.swift; sourceTree = "<group>"; };
+		313984DA250204DE00465679 /* CustomInputBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomInputBar.swift; sourceTree = "<group>"; };
+		3142162824F513A100E7E0C9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		3142162A24F558A800E7E0C9 /* DatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseManager.swift; sourceTree = "<group>"; };
+		3142162C24F6172F00E7E0C9 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		3142162E24F61F6500E7E0C9 /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
+		3142163224F74A5300E7E0C9 /* Conversation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Conversation.swift; sourceTree = "<group>"; };
+		3142163424F7E0FC00E7E0C9 /* SearchResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResult.swift; sourceTree = "<group>"; };
+		3142163624F8033E00E7E0C9 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
+		3152DF5324F4F2FC00FCF86D /* DevyTalk.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DevyTalk.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3152DF5624F4F2FC00FCF86D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		3152DF5824F4F2FC00FCF86D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		3152DF5A24F4F2FC00FCF86D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		3152DF6024F4F2FC00FCF86D /* DevyTalk.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DevyTalk.xcdatamodel; sourceTree = "<group>"; };
+		3152DF6224F4F2FD00FCF86D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		3152DF6524F4F2FD00FCF86D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		3152DF6724F4F2FD00FCF86D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3152DF6E24F4F3B500FCF86D /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
+		3152DF7924F4F48900FCF86D /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
+		3152DF7B24F4F49B00FCF86D /* CGFloat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGFloat.swift; sourceTree = "<group>"; };
+		3152DF7D24F4F4AB00FCF86D /* Int.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Int.swift; sourceTree = "<group>"; };
+		3152DF7F24F4F4BD00FCF86D /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
+		3152DF8124F4F4D300FCF86D /* NanumSquareR.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = NanumSquareR.ttf; sourceTree = "<group>"; };
+		3152DF8224F4F4D300FCF86D /* BMJUA.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = BMJUA.ttf; sourceTree = "<group>"; };
+		3152DF8324F4F4D300FCF86D /* NanumSquareL.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = NanumSquareL.ttf; sourceTree = "<group>"; };
+		3152DF8424F4F4D300FCF86D /* JalnanOTF.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = JalnanOTF.otf; sourceTree = "<group>"; };
+		3152DF8524F4F4D300FCF86D /* NanumSquareB.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = NanumSquareB.ttf; sourceTree = "<group>"; };
+		3152DF8624F4F4D300FCF86D /* NanumSquareEB.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = NanumSquareEB.ttf; sourceTree = "<group>"; };
+		3152DF8724F4F4D300FCF86D /* GmarketSansTTFBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = GmarketSansTTFBold.ttf; sourceTree = "<group>"; };
+		3152DF8824F4F4D300FCF86D /* GmarketSansTTFMedium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = GmarketSansTTFMedium.ttf; sourceTree = "<group>"; };
+		3152DF9124F4F53400FCF86D /* DevyTalk.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DevyTalk.entitlements; sourceTree = "<group>"; };
+		3152DF9224F4F57700FCF86D /* ConversationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsViewController.swift; sourceTree = "<group>"; };
+		3152DF9424F4F58900FCF86D /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		3152DF9624F4F5AC00FCF86D /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		3152DF9824F4F5C900FCF86D /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
+		3152DF9A24F4F5E300FCF86D /* ConversationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsView.swift; sourceTree = "<group>"; };
+		3152DF9C24F4F60A00FCF86D /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		3152DF9E24F4F63100FCF86D /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		3152DFA024F4F65900FCF86D /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
+		3152DFA224F4F66B00FCF86D /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
+		3152DFA424F4F68600FCF86D /* NewConversationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewConversationsView.swift; sourceTree = "<group>"; };
+		3152DFA624F4F6B000FCF86D /* ProfileCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCell.swift; sourceTree = "<group>"; };
+		3152DFA824F4F6C300FCF86D /* ConversationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationCell.swift; sourceTree = "<group>"; };
+		3152DFAA24F4F71300FCF86D /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
+		3152DFAC24F4F72800FCF86D /* NewConversationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewConversationViewController.swift; sourceTree = "<group>"; };
+		3152DFAE24F4F74100FCF86D /* PhotoViewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoViewViewController.swift; sourceTree = "<group>"; };
+		3152DFB024F4F74D00FCF86D /* VideoPlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayerViewController.swift; sourceTree = "<group>"; };
+		31667E3A24F8FAB500710ACD /* PhotoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoView.swift; sourceTree = "<group>"; };
+		31667E3C24F90B9000710ACD /* NewConversationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewConversationCell.swift; sourceTree = "<group>"; };
+		31F8607024FCCB0E00196219 /* UserData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
+		31F8607224FCF52600196219 /* NewChatVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewChatVC.swift; sourceTree = "<group>"; };
+		31F8607A24FDE73500196219 /* ChatList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatList.swift; sourceTree = "<group>"; };
+		31F8607C24FE056300196219 /* ChatListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListVC.swift; sourceTree = "<group>"; };
+		31F8607E24FE393F00196219 /* ChatListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListView.swift; sourceTree = "<group>"; };
+		31F8608124FE39D900196219 /* WaitingInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitingInfoCell.swift; sourceTree = "<group>"; };
+		31F8608324FE39ED00196219 /* BasicWaitingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicWaitingCell.swift; sourceTree = "<group>"; };
+		31F8608524FE39FE00196219 /* GlobalWaitingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalWaitingCell.swift; sourceTree = "<group>"; };
+		31F8608924FEA17B00196219 /* AppointmentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppointmentCell.swift; sourceTree = "<group>"; };
+		31F8608D24FF5E3C00196219 /* InfoWaitingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoWaitingCell.swift; sourceTree = "<group>"; };
+		31F860902500ECB000196219 /* BasicMessageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicMessageModel.swift; sourceTree = "<group>"; };
+		31F860922500EDCC00196219 /* TextMessageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextMessageModel.swift; sourceTree = "<group>"; };
+		5DFA043F0DB8B76134F0E1C5 /* Pods_DevyTalk.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DevyTalk.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		88E94BB678BC680E82024026 /* Pods-DevyTalk.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DevyTalk.debug.xcconfig"; path = "Target Support Files/Pods-DevyTalk/Pods-DevyTalk.debug.xcconfig"; sourceTree = "<group>"; };
+		F6E7C5C6EAA4D4E6E2A8EF2F /* Pods-DevyTalk.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DevyTalk.release.xcconfig"; path = "Target Support Files/Pods-DevyTalk/Pods-DevyTalk.release.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		3152DF5024F4F2FC00FCF86D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				192B818DBA90980F85B514D3 /* Pods_DevyTalk.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		3152DF4A24F4F2FC00FCF86D = {
+			isa = PBXGroup;
+			children = (
+				3152DF5524F4F2FC00FCF86D /* DevyTalk */,
+				3152DF5424F4F2FC00FCF86D /* Products */,
+				4831C6D9F378B58C5DBA2CBB /* Pods */,
+				A8220EDC4D58AC08906537DF /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		3152DF5424F4F2FC00FCF86D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3152DF5324F4F2FC00FCF86D /* DevyTalk.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		3152DF5524F4F2FC00FCF86D /* DevyTalk */ = {
+			isa = PBXGroup;
+			children = (
+				31F8608F2500EC9E00196219 /* MessageModel */,
+				3152DF9124F4F53400FCF86D /* DevyTalk.entitlements */,
+				3142162824F513A100E7E0C9 /* GoogleService-Info.plist */,
+				3152DF7324F4F42500FCF86D /* Model */,
+				3152DF7224F4F41A00FCF86D /* ViewModel */,
+				3152DF7124F4F40500FCF86D /* Resources */,
+				3152DF7624F4F43E00FCF86D /* Cells */,
+				3152DF7524F4F43600FCF86D /* Views */,
+				3152DF7424F4F42C00FCF86D /* Controllers */,
+				3152DF6D24F4F39F00FCF86D /* TabBar */,
+				3152DF5A24F4F2FC00FCF86D /* ViewController.swift */,
+				3152DF7824F4F45200FCF86D /* Extensions */,
+				3152DF7724F4F44E00FCF86D /* Font */,
+				3152DF6224F4F2FD00FCF86D /* Assets.xcassets */,
+				3152DF6424F4F2FD00FCF86D /* LaunchScreen.storyboard */,
+				3152DF6724F4F2FD00FCF86D /* Info.plist */,
+				3152DF5F24F4F2FC00FCF86D /* DevyTalk.xcdatamodeld */,
+			);
+			path = DevyTalk;
+			sourceTree = "<group>";
+		};
+		3152DF6D24F4F39F00FCF86D /* TabBar */ = {
+			isa = PBXGroup;
+			children = (
+				3152DF6E24F4F3B500FCF86D /* TabBarViewController.swift */,
+			);
+			path = TabBar;
+			sourceTree = "<group>";
+		};
+		3152DF7024F4F3FC00FCF86D /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				3152DF9624F4F5AC00FCF86D /* LoginViewController.swift */,
+				3152DF9824F4F5C900FCF86D /* RegisterViewController.swift */,
+			);
+			path = Login;
+			sourceTree = "<group>";
+		};
+		3152DF7124F4F40500FCF86D /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				3152DF5624F4F2FC00FCF86D /* AppDelegate.swift */,
+				3152DF5824F4F2FC00FCF86D /* SceneDelegate.swift */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		3152DF7224F4F41A00FCF86D /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				3142162C24F6172F00E7E0C9 /* Message.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		3152DF7324F4F42500FCF86D /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				3142162A24F558A800E7E0C9 /* DatabaseManager.swift */,
+				3142162E24F61F6500E7E0C9 /* StorageManager.swift */,
+				3142163224F74A5300E7E0C9 /* Conversation.swift */,
+				3142163424F7E0FC00E7E0C9 /* SearchResult.swift */,
+				31F8607024FCCB0E00196219 /* UserData.swift */,
+				31F8607A24FDE73500196219 /* ChatList.swift */,
+				313984D825014F0500465679 /* LastMessage.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		3152DF7424F4F42C00FCF86D /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				3152DF9224F4F57700FCF86D /* ConversationsViewController.swift */,
+				3152DF9424F4F58900FCF86D /* ProfileViewController.swift */,
+				3152DFAA24F4F71300FCF86D /* ChatViewController.swift */,
+				3152DFAC24F4F72800FCF86D /* NewConversationViewController.swift */,
+				3152DF7024F4F3FC00FCF86D /* Login */,
+				3152DFAE24F4F74100FCF86D /* PhotoViewViewController.swift */,
+				3152DFB024F4F74D00FCF86D /* VideoPlayerViewController.swift */,
+				31F8607C24FE056300196219 /* ChatListVC.swift */,
+				31F8607224FCF52600196219 /* NewChatVC.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		3152DF7524F4F43600FCF86D /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				3152DF9A24F4F5E300FCF86D /* ConversationsView.swift */,
+				3152DF9C24F4F60A00FCF86D /* ProfileView.swift */,
+				3152DF9E24F4F63100FCF86D /* LoginView.swift */,
+				3152DFA024F4F65900FCF86D /* RegisterView.swift */,
+				3152DFA224F4F66B00FCF86D /* ChatView.swift */,
+				3152DFA424F4F68600FCF86D /* NewConversationsView.swift */,
+				31667E3A24F8FAB500710ACD /* PhotoView.swift */,
+				31F8607E24FE393F00196219 /* ChatListView.swift */,
+				313984DA250204DE00465679 /* CustomInputBar.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		3152DF7624F4F43E00FCF86D /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				31F8608024FE39B500196219 /* CheckListCell */,
+				3152DFA624F4F6B000FCF86D /* ProfileCell.swift */,
+				3152DFA824F4F6C300FCF86D /* ConversationCell.swift */,
+				31667E3C24F90B9000710ACD /* NewConversationCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		3152DF7724F4F44E00FCF86D /* Font */ = {
+			isa = PBXGroup;
+			children = (
+				3152DF8224F4F4D300FCF86D /* BMJUA.ttf */,
+				3152DF8724F4F4D300FCF86D /* GmarketSansTTFBold.ttf */,
+				3152DF8824F4F4D300FCF86D /* GmarketSansTTFMedium.ttf */,
+				3152DF8424F4F4D300FCF86D /* JalnanOTF.otf */,
+				3152DF8524F4F4D300FCF86D /* NanumSquareB.ttf */,
+				3152DF8624F4F4D300FCF86D /* NanumSquareEB.ttf */,
+				3152DF8324F4F4D300FCF86D /* NanumSquareL.ttf */,
+				3152DF8124F4F4D300FCF86D /* NanumSquareR.ttf */,
+			);
+			path = Font;
+			sourceTree = "<group>";
+		};
+		3152DF7824F4F45200FCF86D /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				3152DF7924F4F48900FCF86D /* UIColor.swift */,
+				3152DF7B24F4F49B00FCF86D /* CGFloat.swift */,
+				3152DF7D24F4F4AB00FCF86D /* Int.swift */,
+				3152DF7F24F4F4BD00FCF86D /* Notification.swift */,
+				3142163624F8033E00E7E0C9 /* Date.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		31F8608024FE39B500196219 /* CheckListCell */ = {
+			isa = PBXGroup;
+			children = (
+				31F8608124FE39D900196219 /* WaitingInfoCell.swift */,
+				31F8608924FEA17B00196219 /* AppointmentCell.swift */,
+				31F8608D24FF5E3C00196219 /* InfoWaitingCell.swift */,
+				31F8608324FE39ED00196219 /* BasicWaitingCell.swift */,
+				31F8608524FE39FE00196219 /* GlobalWaitingCell.swift */,
+			);
+			path = CheckListCell;
+			sourceTree = "<group>";
+		};
+		31F8608F2500EC9E00196219 /* MessageModel */ = {
+			isa = PBXGroup;
+			children = (
+				31F860902500ECB000196219 /* BasicMessageModel.swift */,
+				31F860922500EDCC00196219 /* TextMessageModel.swift */,
+			);
+			path = MessageModel;
+			sourceTree = "<group>";
+		};
+		4831C6D9F378B58C5DBA2CBB /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				88E94BB678BC680E82024026 /* Pods-DevyTalk.debug.xcconfig */,
+				F6E7C5C6EAA4D4E6E2A8EF2F /* Pods-DevyTalk.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		A8220EDC4D58AC08906537DF /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				5DFA043F0DB8B76134F0E1C5 /* Pods_DevyTalk.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		3152DF5224F4F2FC00FCF86D /* DevyTalk */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3152DF6A24F4F2FD00FCF86D /* Build configuration list for PBXNativeTarget "DevyTalk" */;
+			buildPhases = (
+				8F38ADE96409862B46A0AB90 /* [CP] Check Pods Manifest.lock */,
+				3152DF4F24F4F2FC00FCF86D /* Sources */,
+				3152DF5024F4F2FC00FCF86D /* Frameworks */,
+				3152DF5124F4F2FC00FCF86D /* Resources */,
+				745A0E9ED3395694340542EE /* [CP] Embed Pods Frameworks */,
+				A813B55D4F22837EE4589AA7 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DevyTalk;
+			productName = DevyTalk;
+			productReference = 3152DF5324F4F2FC00FCF86D /* DevyTalk.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		3152DF4B24F4F2FC00FCF86D /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1140;
+				LastUpgradeCheck = 1140;
+				ORGANIZATIONNAME = HeaJiJeon;
+				TargetAttributes = {
+					3152DF5224F4F2FC00FCF86D = {
+						CreatedOnToolsVersion = 11.4;
+					};
+				};
+			};
+			buildConfigurationList = 3152DF4E24F4F2FC00FCF86D /* Build configuration list for PBXProject "DevyTalk" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 3152DF4A24F4F2FC00FCF86D;
+			productRefGroup = 3152DF5424F4F2FC00FCF86D /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				3152DF5224F4F2FC00FCF86D /* DevyTalk */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		3152DF5124F4F2FC00FCF86D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3152DF8A24F4F4D300FCF86D /* BMJUA.ttf in Resources */,
+				3152DF6624F4F2FD00FCF86D /* LaunchScreen.storyboard in Resources */,
+				3152DF8B24F4F4D300FCF86D /* NanumSquareL.ttf in Resources */,
+				3152DF8D24F4F4D300FCF86D /* NanumSquareB.ttf in Resources */,
+				3152DF8E24F4F4D300FCF86D /* NanumSquareEB.ttf in Resources */,
+				3152DF8F24F4F4D300FCF86D /* GmarketSansTTFBold.ttf in Resources */,
+				3152DF8C24F4F4D300FCF86D /* JalnanOTF.otf in Resources */,
+				3152DF8924F4F4D300FCF86D /* NanumSquareR.ttf in Resources */,
+				3152DF6324F4F2FD00FCF86D /* Assets.xcassets in Resources */,
+				3142162924F513A100E7E0C9 /* GoogleService-Info.plist in Resources */,
+				3152DF9024F4F4D300FCF86D /* GmarketSansTTFMedium.ttf in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		745A0E9ED3395694340542EE /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-DevyTalk/Pods-DevyTalk-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-DevyTalk/Pods-DevyTalk-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-DevyTalk/Pods-DevyTalk-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		8F38ADE96409862B46A0AB90 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-DevyTalk-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A813B55D4F22837EE4589AA7 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-DevyTalk/Pods-DevyTalk-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-DevyTalk/Pods-DevyTalk-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-DevyTalk/Pods-DevyTalk-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		3152DF4F24F4F2FC00FCF86D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3152DF9724F4F5AC00FCF86D /* LoginViewController.swift in Sources */,
+				3152DF5B24F4F2FC00FCF86D /* ViewController.swift in Sources */,
+				3142163324F74A5300E7E0C9 /* Conversation.swift in Sources */,
+				313984D925014F0500465679 /* LastMessage.swift in Sources */,
+				31F8608624FE39FE00196219 /* GlobalWaitingCell.swift in Sources */,
+				3142162B24F558A800E7E0C9 /* DatabaseManager.swift in Sources */,
+				3142162F24F61F6500E7E0C9 /* StorageManager.swift in Sources */,
+				3152DFB124F4F74D00FCF86D /* VideoPlayerViewController.swift in Sources */,
+				31F8608A24FEA17B00196219 /* AppointmentCell.swift in Sources */,
+				3152DFAB24F4F71300FCF86D /* ChatViewController.swift in Sources */,
+				31F8608E24FF5E3C00196219 /* InfoWaitingCell.swift in Sources */,
+				31F8607F24FE393F00196219 /* ChatListView.swift in Sources */,
+				3152DF9324F4F57700FCF86D /* ConversationsViewController.swift in Sources */,
+				3152DF7A24F4F48900FCF86D /* UIColor.swift in Sources */,
+				3152DFA324F4F66B00FCF86D /* ChatView.swift in Sources */,
+				3152DFA924F4F6C300FCF86D /* ConversationCell.swift in Sources */,
+				3152DF8024F4F4BD00FCF86D /* Notification.swift in Sources */,
+				3152DFA524F4F68600FCF86D /* NewConversationsView.swift in Sources */,
+				31667E3D24F90B9000710ACD /* NewConversationCell.swift in Sources */,
+				3152DF9B24F4F5E300FCF86D /* ConversationsView.swift in Sources */,
+				3152DF7C24F4F49B00FCF86D /* CGFloat.swift in Sources */,
+				31F8607324FCF52600196219 /* NewChatVC.swift in Sources */,
+				31667E3B24F8FAB500710ACD /* PhotoView.swift in Sources */,
+				3152DFA724F4F6B000FCF86D /* ProfileCell.swift in Sources */,
+				31F8607D24FE056300196219 /* ChatListVC.swift in Sources */,
+				3152DFAF24F4F74100FCF86D /* PhotoViewViewController.swift in Sources */,
+				31F8608424FE39ED00196219 /* BasicWaitingCell.swift in Sources */,
+				31F860912500ECB000196219 /* BasicMessageModel.swift in Sources */,
+				3152DF9D24F4F60A00FCF86D /* ProfileView.swift in Sources */,
+				3152DFA124F4F65900FCF86D /* RegisterView.swift in Sources */,
+				3152DF6124F4F2FC00FCF86D /* DevyTalk.xcdatamodeld in Sources */,
+				3152DFAD24F4F72800FCF86D /* NewConversationViewController.swift in Sources */,
+				3152DF9524F4F58900FCF86D /* ProfileViewController.swift in Sources */,
+				31F8607B24FDE73500196219 /* ChatList.swift in Sources */,
+				3142163524F7E0FC00E7E0C9 /* SearchResult.swift in Sources */,
+				3152DF5724F4F2FC00FCF86D /* AppDelegate.swift in Sources */,
+				313984DB250204DE00465679 /* CustomInputBar.swift in Sources */,
+				3142162D24F6172F00E7E0C9 /* Message.swift in Sources */,
+				3152DF6F24F4F3B500FCF86D /* TabBarViewController.swift in Sources */,
+				3152DF9924F4F5C900FCF86D /* RegisterViewController.swift in Sources */,
+				3142163724F8033E00E7E0C9 /* Date.swift in Sources */,
+				31F8607124FCCB0E00196219 /* UserData.swift in Sources */,
+				3152DF5924F4F2FC00FCF86D /* SceneDelegate.swift in Sources */,
+				3152DF9F24F4F63100FCF86D /* LoginView.swift in Sources */,
+				31F860932500EDCC00196219 /* TextMessageModel.swift in Sources */,
+				3152DF7E24F4F4AB00FCF86D /* Int.swift in Sources */,
+				31F8608224FE39D900196219 /* WaitingInfoCell.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		3152DF6424F4F2FD00FCF86D /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				3152DF6524F4F2FD00FCF86D /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		3152DF6824F4F2FD00FCF86D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		3152DF6924F4F2FD00FCF86D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		3152DF6B24F4F2FD00FCF86D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 88E94BB678BC680E82024026 /* Pods-DevyTalk.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = DevyTalk/DevyTalk.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = KNHX5B578D;
+				INFOPLIST_FILE = DevyTalk/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.DevyTalk;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		3152DF6C24F4F2FD00FCF86D /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = F6E7C5C6EAA4D4E6E2A8EF2F /* Pods-DevyTalk.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = DevyTalk/DevyTalk.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = KNHX5B578D;
+				INFOPLIST_FILE = DevyTalk/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.DevyTalk;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		3152DF4E24F4F2FC00FCF86D /* Build configuration list for PBXProject "DevyTalk" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3152DF6824F4F2FD00FCF86D /* Debug */,
+				3152DF6924F4F2FD00FCF86D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3152DF6A24F4F2FD00FCF86D /* Build configuration list for PBXNativeTarget "DevyTalk" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3152DF6B24F4F2FD00FCF86D /* Debug */,
+				3152DF6C24F4F2FD00FCF86D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		3152DF5F24F4F2FC00FCF86D /* DevyTalk.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				3152DF6024F4F2FC00FCF86D /* DevyTalk.xcdatamodel */,
+			);
+			currentVersion = 3152DF6024F4F2FC00FCF86D /* DevyTalk.xcdatamodel */;
+			path = DevyTalk.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = 3152DF4B24F4F2FC00FCF86D /* Project object */;
+}
