@@ -346,10 +346,6 @@ extension NewChatVC: MessagesDataSource, MessagesLayoutDelegate, MessagesDisplay
     guard indexPath.section == self.messageLog.count - 1 else { return 0 }
     return 20.i
   }
-
-//  func cellBottomLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
-//    return NSAttributedString(string: "1", attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 10), NSAttributedString.Key.foregroundColor: UIColor.darkGray])
-//  }
   
   func messageStyle(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageStyle {
     
