@@ -52,45 +52,45 @@ struct UserData: Codable {
     self = try JSONDecoder().decode(UserData.self, from: JSONSerialization.data(withJSONObject: dictionary))
   }
   
-  init() {
-    self.callDATE = "0"
-    self.chats = nil
-    self.country = "KR"
-    self.check = false
-    self.docBIRTH = "19901218"
-    self.docEMAIL = "viva@viva.viva"
-    self.docGENDER = 2
-    self.docID = "tempId"
-    self.docNAME = "환자임"
-    self.docPHONE = "01012345678"
-    self.docPIC = "0"
-    self.docPOSITION = "환자"
-    self.hosID = "0"
-    self.hosNAME = "0"
-    self.remoteSTATE = -1
-    self.reserDATE = "0"
-    self.tfDOC = 99
-  }
-  
-//  init() { // 대전 선병원 원무과의 홍길동
+//  init() {
 //    self.callDATE = "0"
 //    self.chats = nil
 //    self.country = "KR"
 //    self.check = false
-//    self.docBIRTH = "19910228"
-//    self.docEMAIL = "hosAdmin@viva.com"
+//    self.docBIRTH = "19901218"
+//    self.docEMAIL = "viva@viva.viva"
 //    self.docGENDER = 2
-//    self.docID = "tempHosAdmin"
-//    self.docNAME = "홍길동"
-//    self.docPHONE = "01011112222"
+//    self.docID = "tempId"
+//    self.docNAME = "환자임"
+//    self.docPHONE = "01012345678"
 //    self.docPIC = "0"
-//    self.docPOSITION = "원무과"
-//    self.hosID = "H24783"
-//    self.hosNAME = "대전선병원"
+//    self.docPOSITION = "환자"
+//    self.hosID = "0"
+//    self.hosNAME = "0"
 //    self.remoteSTATE = -1
 //    self.reserDATE = "0"
-//    self.tfDOC = 2
+//    self.tfDOC = 99
 //  }
+  
+  init() { // 대전 선병원 원무과의 홍길동
+    self.callDATE = "0"
+    self.chats = nil
+    self.country = "KR"
+    self.check = false
+    self.docBIRTH = "19910228"
+    self.docEMAIL = "hosAdmin@viva.com"
+    self.docGENDER = 2
+    self.docID = "tempHosAdmin"
+    self.docNAME = "홍길동"
+    self.docPHONE = "01011112222"
+    self.docPIC = "0"
+    self.docPOSITION = "원무과"
+    self.hosID = "H24783"
+    self.hosNAME = "대전선병원"
+    self.remoteSTATE = -1
+    self.reserDATE = "0"
+    self.tfDOC = 2
+  }
   
   
 }

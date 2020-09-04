@@ -20,7 +20,7 @@ class BasicMessageModel: MessageType {
   var chatId: String = ""                   // m_chatid
   
 //  var checked: Bool = false
-//  var translated: Bool = false
+  var translated: Bool = false
   
 }
 
