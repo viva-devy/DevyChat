@@ -1,0 +1,6 @@
+framework module Pods_DevyTalk {
+  umbrella header "Pods-DevyTalk-umbrella.h"
+
+  export *
+  module * { export * }
+}
