@@ -43,7 +43,7 @@ class BasicMessageModel: MessageType {
       self.translate() {
         let transAttri = self.textToAttribute($0)
         transAttri.addAttribute(.foregroundColor, value: UIColor.appColor(.aPp), range: NSMakeRange(0, transAttri.length))
-        transAttri.insert(NSMutableAttributedString(string: "\n \n"), at: 0)
+        transAttri.insert(self.textToAttribute("\n\n"), at: 0)
         transAttri.insert(origin, at: 0)
         self.translatedText = transAttri
         let item: (String, NSMutableAttributedString) = ("finish", self.translatedText!)
