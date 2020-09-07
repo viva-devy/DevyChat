@@ -86,6 +86,7 @@ class NewChatVC: MessagesViewController {
     messagesCollectionView.messagesLayoutDelegate = self
     messagesCollectionView.messagesDisplayDelegate = self
     messagesCollectionView.messageCellDelegate = self
+    messagesCollectionView.contentInset = UIEdgeInsets(top: 10, left: 0, bottom: 20, right: 0)
     messageInputBar.delegate = self
     
     
@@ -105,6 +106,7 @@ class NewChatVC: MessagesViewController {
       layout.setMessageIncomingMessageTopLabelAlignment(LabelAlignment(textAlignment: .left, textInsets: UIEdgeInsets(top: 0, left: 7.i + 28.i + 9.i, bottom: 7.i, right: 0)))
       layout.setMessageIncomingAccessoryViewPosition(.messageBottom)
       layout.setMessageOutgoingAccessoryViewPosition(.messageBottom)
+      
       customMessageSizeCalculator = customCalculator
 //      layout.setMessageIncomingCellBottomLabelAlignment(LabelAlignment(textAlignment: .right, textInsets: UIEdgeInsets(top: 0, left: 7.i + 28.i + 9.i, bottom: 0, right: 0)))
 //      layout.setMessageOutgoingCellBottomLabelAlignment(LabelAlignment(textAlignment: .right, textInsets: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 7.i)))
@@ -380,8 +382,6 @@ extension NewChatVC: MessagesDataSource, MessagesLayoutDelegate, MessagesDisplay
     attri.addAttribute(.baselineOffset, value: 5.i, range: NSRange(location: 0, length: " 번역하기".count))
     
     attri.insert(attachStr, at: 0)
-    
-    
 
     return attri
   }
