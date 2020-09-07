@@ -21,11 +21,18 @@ class TextMessageModel: BasicMessageModel {
     self.messageId = messageId
     self.chatId = ID
     self.sentDate = date
-    self.kind = .text(message)
     self.messageUser = user
     self.readUserArr = list
     self.unreadCount = unread
     self.tmInt = tmInt
     self.sender = Sender(senderId: user.docID ?? "docId", displayName: user.docNAME ?? "Error")
+    
+    // 이부분 테스트로 진행함
+    
+    if message == "finishNow" {
+      self.kind = .custom("finish")
+    } else {
+      self.kind = .text(message)
+    }
   }
 }
