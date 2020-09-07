@@ -66,6 +66,9 @@
 		31F8608E24FF5E3C00196219 /* InfoWaitingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31F8608D24FF5E3C00196219 /* InfoWaitingCell.swift */; };
 		31F860912500ECB000196219 /* BasicMessageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31F860902500ECB000196219 /* BasicMessageModel.swift */; };
 		31F860932500EDCC00196219 /* TextMessageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31F860922500EDCC00196219 /* TextMessageModel.swift */; };
+		40AB19E62504041B004C238A /* FinishNowCC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40AB19E52504041B004C238A /* FinishNowCC.swift */; };
+		40AB19E8250405AA004C238A /* CustomMessagesSizeCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40AB19E7250405AA004C238A /* CustomMessagesSizeCalculator.swift */; };
+		40AB19EA25040722004C238A /* CustomMessageFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40AB19E925040722004C238A /* CustomMessageFlowLayout.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -130,6 +133,9 @@
 		31F8608D24FF5E3C00196219 /* InfoWaitingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoWaitingCell.swift; sourceTree = "<group>"; };
 		31F860902500ECB000196219 /* BasicMessageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicMessageModel.swift; sourceTree = "<group>"; };
 		31F860922500EDCC00196219 /* TextMessageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextMessageModel.swift; sourceTree = "<group>"; };
+		40AB19E52504041B004C238A /* FinishNowCC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinishNowCC.swift; sourceTree = "<group>"; };
+		40AB19E7250405AA004C238A /* CustomMessagesSizeCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomMessagesSizeCalculator.swift; sourceTree = "<group>"; };
+		40AB19E925040722004C238A /* CustomMessageFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomMessageFlowLayout.swift; sourceTree = "<group>"; };
 		5DFA043F0DB8B76134F0E1C5 /* Pods_DevyTalk.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DevyTalk.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		88E94BB678BC680E82024026 /* Pods-DevyTalk.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DevyTalk.debug.xcconfig"; path = "Target Support Files/Pods-DevyTalk/Pods-DevyTalk.debug.xcconfig"; sourceTree = "<group>"; };
 		F6E7C5C6EAA4D4E6E2A8EF2F /* Pods-DevyTalk.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DevyTalk.release.xcconfig"; path = "Target Support Files/Pods-DevyTalk/Pods-DevyTalk.release.xcconfig"; sourceTree = "<group>"; };
@@ -249,6 +255,8 @@
 				3152DFB024F4F74D00FCF86D /* VideoPlayerViewController.swift */,
 				31F8607C24FE056300196219 /* ChatListVC.swift */,
 				31F8607224FCF52600196219 /* NewChatVC.swift */,
+				40AB19E7250405AA004C238A /* CustomMessagesSizeCalculator.swift */,
+				40AB19E925040722004C238A /* CustomMessageFlowLayout.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -276,6 +284,7 @@
 				3152DFA624F4F6B000FCF86D /* ProfileCell.swift */,
 				3152DFA824F4F6C300FCF86D /* ConversationCell.swift */,
 				31667E3C24F90B9000710ACD /* NewConversationCell.swift */,
+				40AB19E52504041B004C238A /* FinishNowCC.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -512,6 +521,7 @@
 				3152DFA724F4F6B000FCF86D /* ProfileCell.swift in Sources */,
 				31F8607D24FE056300196219 /* ChatListVC.swift in Sources */,
 				3152DFAF24F4F74100FCF86D /* PhotoViewViewController.swift in Sources */,
+				40AB19EA25040722004C238A /* CustomMessageFlowLayout.swift in Sources */,
 				31F8608424FE39ED00196219 /* BasicWaitingCell.swift in Sources */,
 				31F860912500ECB000196219 /* BasicMessageModel.swift in Sources */,
 				3152DF9D24F4F60A00FCF86D /* ProfileView.swift in Sources */,
@@ -519,12 +529,14 @@
 				3152DF6124F4F2FC00FCF86D /* DevyTalk.xcdatamodeld in Sources */,
 				3152DFAD24F4F72800FCF86D /* NewConversationViewController.swift in Sources */,
 				3152DF9524F4F58900FCF86D /* ProfileViewController.swift in Sources */,
+				40AB19E8250405AA004C238A /* CustomMessagesSizeCalculator.swift in Sources */,
 				31F8607B24FDE73500196219 /* ChatList.swift in Sources */,
 				3142163524F7E0FC00E7E0C9 /* SearchResult.swift in Sources */,
 				3152DF5724F4F2FC00FCF86D /* AppDelegate.swift in Sources */,
 				313984DB250204DE00465679 /* CustomInputBar.swift in Sources */,
 				3142162D24F6172F00E7E0C9 /* Message.swift in Sources */,
 				3152DF6F24F4F3B500FCF86D /* TabBarViewController.swift in Sources */,
+				40AB19E62504041B004C238A /* FinishNowCC.swift in Sources */,
 				3152DF9924F4F5C900FCF86D /* RegisterViewController.swift in Sources */,
 				3142163724F8033E00E7E0C9 /* Date.swift in Sources */,
 				31F8607124FCCB0E00196219 /* UserData.swift in Sources */,

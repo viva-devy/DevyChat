@@ -46,19 +46,8 @@ class NewChatVC: MessagesViewController {
       self.navigationController?.popViewController(animated: true)
       return }
     getChatLog(chatID: chatID) {
-      self.messageLog = $0.values.map { (origin) -> TextMessageModel in
-        let id = origin["m_chatid"] as? String
-        let delta = (origin["m_messageDate"] as? [String: Any])?["time"] as? Int ?? 0
-        let messageId = origin["m_messageId"] as? String
-        let type = origin["m_messageType"] as? String
-        let user = try? UserData(dictionary: (origin["m_messageUser"] as? [String: Any]) ?? [:])
-        // [String: Any]타입의 딕셔너리로 Userdata를 생성한다.
-        let list = origin["m_readUserList"] as? [String]
-        let unread = origin["m_unreadCoung"] as? Int
-        let message = origin["message"] as? String
-        let tm = origin["tm_int"] as? Int
-        
-        return TextMessageModel(ID: id ?? "", date: Date(timeIntervalSince1970: TimeInterval(delta)), messageId: messageId ?? "", type: type ?? "", user: user ?? UserData(), list: list ?? [], unread: unread ?? 0, message: message ?? "", tmInt: tm ?? 0)
+      self.messageLog = $0.values.map { (origin) -> BasicMessageModel in
+        self.convertToMessageLog(origin)
       }.sorted(by: { (lef, ref) -> Bool in
         lef.sentDate < ref.sentDate
       })
@@ -67,10 +56,19 @@ class NewChatVC: MessagesViewController {
 
   }
   
-  override func viewDidAppear(_ animated: Bool) {
-    super.viewDidAppear(animated)
+  private func convertToMessageLog(_ origin: [String: Any]) -> BasicMessageModel {
+    let id = origin["m_chatid"] as? String
+    let delta = (origin["m_messageDate"] as? [String: Any])?["time"] as? Int ?? 0
+    let messageId = origin["m_messageId"] as? String
+    let type = origin["m_messageType"] as? String
+    let user = try? UserData(dictionary: (origin["m_messageUser"] as? [String: Any]) ?? [:])
+    // [String: Any]타입의 딕셔너리로 Userdata를 생성한다.
+    let list = origin["m_readUserList"] as? [String]
+    let unread = origin["m_unreadCoung"] as? Int
+    let message = origin["message"] as? String
+    let tm = origin["tm_int"] as? Int
     
-    
+    return TextMessageModel(ID: id ?? "", date: Date(timeIntervalSince1970: TimeInterval(delta)), messageId: messageId ?? "", type: type ?? "", user: user ?? UserData(), list: list ?? [], unread: unread ?? 0, message: message ?? "", tmInt: tm ?? 0)
   }
   
   // 보낸기록이 있는지 확인
@@ -79,6 +77,8 @@ class NewChatVC: MessagesViewController {
   }
   
   private func checkFirts() {
+//    messagesCollectionView = MessagesCollectionView(frame: .zero, collectionViewLayout: CustomMessageFlowLayout())
+    messagesCollectionView.register(FinishNowCC.self)
     messagesCollectionView.backgroundColor = .appColor(.lgr1)
     messagesCollectionView.messagesDataSource = self
     messagesCollectionView.messagesLayoutDelegate = self
@@ -86,9 +86,9 @@ class NewChatVC: MessagesViewController {
     messagesCollectionView.messageCellDelegate = self
     messageInputBar.delegate = self
     
+    
     scrollsToBottomOnKeyboardBeginsEditing = true // default false
     maintainPositionOnKeyboardFrameChanged = true // default false
-    
     
     if let layout = messagesCollectionView.collectionViewLayout as? MessagesCollectionViewFlowLayout {
       layout.setMessageIncomingAvatarPosition(.init(vertical: .cellTop))
@@ -226,6 +226,30 @@ class NewChatVC: MessagesViewController {
 
   }
   
+  override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    guard let dataSource = messagesCollectionView.messagesDataSource else { return UICollectionViewCell() }
+    
+    let message = dataSource.messageForItem(at: indexPath, in: messagesCollectionView)
+    switch message.kind {
+      case .custom(let tempType):
+        guard let type = tempType as? String else { fallthrough }
+        return generateCell(type: type, indexPath: indexPath, message: message, collection: messagesCollectionView)
+      default:
+        return super.collectionView(collectionView, cellForItemAt: indexPath)
+    }
+  }
+  
+  private func generateCell(type: String, indexPath: IndexPath, message: MessageType, collection: MessagesCollectionView) -> UICollectionViewCell {
+    switch type {
+      case "finish":
+        let cell = messagesCollectionView.dequeueReusableCell(FinishNowCC.self, for: indexPath)
+        cell.configure(with: message, at: indexPath, and: collection)
+        return cell
+      default:
+       return UICollectionViewCell()
+    }
+  }
+  
 }
 
 
@@ -286,6 +310,10 @@ extension NewChatVC: InputBarAccessoryViewDelegate {
 }
 
 extension NewChatVC: MessagesDataSource, MessagesLayoutDelegate, MessagesDisplayDelegate {
+  func customCellSizeCalculator(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CellSizeCalculator {
+    return CustomMessageSizeCalculator(layout: messagesCollectionView.messagesCollectionViewFlowLayout)
+  }
+  
   func backgroundColor(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor {
     return .appColor(message.sender.senderId == selfSender?.senderId ? .aPp : .whiteTwo)
   }
