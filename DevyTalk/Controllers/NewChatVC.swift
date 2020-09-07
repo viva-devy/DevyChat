@@ -30,6 +30,8 @@ class NewChatVC: MessagesViewController {
     }
   }
   
+  var customMessageSizeCalculator: MessageSizeCalculator?
+  
   var selfSender: Sender? {
     guard let id = UserMe.shared.user.docID else { return nil }
     
@@ -91,6 +93,8 @@ class NewChatVC: MessagesViewController {
     maintainPositionOnKeyboardFrameChanged = true // default false
     
     if let layout = messagesCollectionView.collectionViewLayout as? MessagesCollectionViewFlowLayout {
+      let customCalculator = CustomMessageSizeCalculator(layout: layout)
+      layout.addCalculator(customCalculator)
       layout.setMessageIncomingAvatarPosition(.init(vertical: .cellTop))
       layout.setMessageIncomingAvatarSize(CGSize(width: 28.i, height: 28.i))
       layout.setAvatarLeadingTrailingPadding(7.i)
@@ -101,7 +105,7 @@ class NewChatVC: MessagesViewController {
       layout.setMessageIncomingMessageTopLabelAlignment(LabelAlignment(textAlignment: .left, textInsets: UIEdgeInsets(top: 0, left: 7.i + 28.i + 9.i, bottom: 7.i, right: 0)))
       layout.setMessageIncomingAccessoryViewPosition(.messageBottom)
       layout.setMessageOutgoingAccessoryViewPosition(.messageBottom)
-      
+      customMessageSizeCalculator = customCalculator
 //      layout.setMessageIncomingCellBottomLabelAlignment(LabelAlignment(textAlignment: .right, textInsets: UIEdgeInsets(top: 0, left: 7.i + 28.i + 9.i, bottom: 0, right: 0)))
 //      layout.setMessageOutgoingCellBottomLabelAlignment(LabelAlignment(textAlignment: .right, textInsets: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 7.i)))
 //      layout.setMessageOutgoingMessageBottomLabelAlignment(LabelAlignment(textAlignment: .right, textInsets: .zero))
@@ -223,7 +227,6 @@ class NewChatVC: MessagesViewController {
 //    let bottomItems = [makeButton(named: "album"), makeButton(named: "camera"), makeButton(named: "file"),.flexibleSpace]
 //    messageInputBar.setStackViewItems(bottomItems, forStack: .bottom, animated: false)
     messageInputBar.isHidden = true
-
   }
   
   override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -232,8 +235,8 @@ class NewChatVC: MessagesViewController {
     let message = dataSource.messageForItem(at: indexPath, in: messagesCollectionView)
     switch message.kind {
       case .custom(let tempType):
-        guard let type = tempType as? String else { fallthrough }
-        return generateCell(type: type, indexPath: indexPath, message: message, collection: messagesCollectionView)
+        guard let type = tempType as? (String, NSMutableAttributedString) else { fallthrough }
+        return generateCell(type: type.0, indexPath: indexPath, message: message, collection: messagesCollectionView)
       default:
         return super.collectionView(collectionView, cellForItemAt: indexPath)
     }
@@ -244,11 +247,24 @@ class NewChatVC: MessagesViewController {
       case "finish":
         let cell = messagesCollectionView.dequeueReusableCell(FinishNowCC.self, for: indexPath)
         cell.configure(with: message, at: indexPath, and: collection)
+        cell.finishDelegate = self
         return cell
       default:
        return UICollectionViewCell()
     }
   }
+  
+//  @objc func didTapFinishNow(_ sender: UIButton) {
+//    print("didTapFinishNow")
+//  }
+  
+}
+
+extension NewChatVC: FinishNowCCDelegate {
+  func didTapFinishNow() {
+    print("didTapFinishNow")
+  }
+  
   
 }
 
@@ -311,7 +327,7 @@ extension NewChatVC: InputBarAccessoryViewDelegate {
 
 extension NewChatVC: MessagesDataSource, MessagesLayoutDelegate, MessagesDisplayDelegate {
   func customCellSizeCalculator(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CellSizeCalculator {
-    return CustomMessageSizeCalculator(layout: messagesCollectionView.messagesCollectionViewFlowLayout)
+    return customMessageSizeCalculator ?? CustomMessageSizeCalculator(layout: messagesCollectionView.messagesCollectionViewFlowLayout)
   }
   
   func backgroundColor(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor {
@@ -481,16 +497,17 @@ extension NewChatVC: MessageCellDelegate {
     guard let idx = self.messagesCollectionView.indexPath(for: cell) else { return }
     guard !self.messageLog[idx.section].translated else { return }
     guard self.messageLog[idx.section].sender.senderId != self.selfSender?.senderId else { return }
-    self.messageLog[idx.section].translated.toggle()
-    self.messagesCollectionView.reloadDataAndKeepOffset()
+    self.messageLog[idx.section].toggleTrans {
+      self.messagesCollectionView.reloadDataAndKeepOffset()
+    }
+    
   }
-  
-  
   
   func didTapAccessoryView(in cell: MessageCollectionViewCell) {
     guard let idx = self.messagesCollectionView.indexPath(for: cell) else { return }
     guard self.messageLog[idx.section].translated else { return }
-    self.messageLog[idx.section].translated.toggle()
-    self.messagesCollectionView.reloadDataAndKeepOffset()
+    self.messageLog[idx.section].toggleTrans {
+      self.messagesCollectionView.reloadDataAndKeepOffset()
+    }
   }
 }
