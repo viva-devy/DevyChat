@@ -120,7 +120,7 @@ open class MessageLabel: UILabel {
         return size
     }
     
-    internal var messageLabelFont: UIFont?
+    open var messageLabelFont: UIFont?
 
     private var attributesNeedUpdate = false
 

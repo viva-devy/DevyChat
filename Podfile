@@ -7,6 +7,7 @@ target 'DevyTalk' do
 
   # Pods for DevyTalk
   pod 'SnapKit', '= 5.0.1’
+  pod 'Alamofire'
  
   pod 'GoogleSignIn'  
   
