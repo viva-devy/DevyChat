@@ -250,6 +250,8 @@ open class MessageContentCell: MessageCollectionViewCell {
             } else {
                 origin.y = attributes.cellTopLabelSize.height + attributes.messageTopLabelSize.height + attributes.messageContainerPadding.top
             }
+          print("container: ", attributes.accessoryViewSize.height, attributes.messageContainerSize.height, attributes.messageContainerPadding.vertical, attributes.cellTopLabelSize.height, attributes.messageTopLabelSize.height, attributes.messageContainerPadding.top, origin.y)
+          
         }
 
         let avatarPadding = attributes.avatarLeadingTrailingPadding
@@ -293,6 +295,7 @@ open class MessageContentCell: MessageCollectionViewCell {
         messageTopLabel.textInsets = attributes.messageTopLabelAlignment.textInsets
 
         let y = messageContainerView.frame.minY - attributes.messageContainerPadding.top - attributes.messageTopLabelSize.height
+      print("here!!!: ", messageContainerView.frame.minY, attributes.messageContainerPadding.top, attributes.messageTopLabelSize.height, " y: ", y)
         let origin = CGPoint(x: 0, y: y)
         
         messageTopLabel.frame = CGRect(origin: origin, size: attributes.messageTopLabelSize)

@@ -7,7 +7,9 @@
 //
 
 import Foundation
+import FirebaseCore
 import FirebaseDatabase
+import FirebaseFirestore
 import MessageKit
 
 final class DatabaseManager {
@@ -36,6 +38,7 @@ extension DatabaseManager {
         completion(.failure(DatabaseError.failedToFetch))
         return
       }
+      
       completion(.success(value))
     }
   }
@@ -458,6 +461,8 @@ extension DatabaseManager {
     let chatMemberRef = database.child("chat_messages").child(chatID).childByAutoId()
      
     guard let childKey = chatMemberRef.key else { return }
+    
+//    database.child("tempRef").child(childKey).setValue(["date": Timestamp()])
     
     let mDate = Date().toMessageDate()
     

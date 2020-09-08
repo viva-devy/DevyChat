@@ -87,6 +87,7 @@ class NewChatVC: MessagesViewController {
     messagesCollectionView.messagesDisplayDelegate = self
     messagesCollectionView.messageCellDelegate = self
     messagesCollectionView.contentInset = UIEdgeInsets(top: 10, left: 0, bottom: 20, right: 0)
+    
     messageInputBar.delegate = self
     
     
@@ -96,14 +97,14 @@ class NewChatVC: MessagesViewController {
     if let layout = messagesCollectionView.collectionViewLayout as? MessagesCollectionViewFlowLayout {
       let customCalculator = CustomMessageSizeCalculator(layout: layout)
       layout.addCalculator(customCalculator)
-      layout.setMessageIncomingAvatarPosition(.init(vertical: .cellTop))
+      layout.setMessageIncomingAvatarPosition(.init(vertical: .messageLabelTop))
       layout.setMessageIncomingAvatarSize(CGSize(width: 28.i, height: 28.i))
       layout.setAvatarLeadingTrailingPadding(7.i)
-      layout.setMessageIncomingMessagePadding(UIEdgeInsets(top: 0, left: 9.i, bottom: 10.i, right: 87.i))
-      layout.setMessageOutgoingMessagePadding(UIEdgeInsets(top: 0, left: 87.i, bottom: 10.i, right: 7.i))
+      layout.setMessageIncomingMessagePadding(UIEdgeInsets(top: 7.i, left: 9.i, bottom: 10.i, right: 27.i))
+      layout.setMessageOutgoingMessagePadding(UIEdgeInsets(top: 0, left: 85.i, bottom: 10.i, right: 7.i))
       layout.setMessageOutgoingAvatarSize(.zero)
-      layout.setMessageIncomingAccessoryViewSize(CGSize(width: 50.i, height: 50.i))
-      layout.setMessageIncomingMessageTopLabelAlignment(LabelAlignment(textAlignment: .left, textInsets: UIEdgeInsets(top: 0, left: 7.i + 28.i + 9.i, bottom: 7.i, right: 0)))
+      layout.setMessageIncomingAccessoryViewSize(CGSize(width: 44.i, height: 0))
+      layout.setMessageIncomingMessageTopLabelAlignment(LabelAlignment(textAlignment: .left, textInsets: UIEdgeInsets(top: 0, left: 7.i + 28.i + 9.i, bottom: 0, right: 0)))
       layout.setMessageIncomingAccessoryViewPosition(.messageBottom)
       layout.setMessageOutgoingAccessoryViewPosition(.messageBottom)
       
@@ -361,6 +362,14 @@ extension NewChatVC: MessagesDataSource, MessagesLayoutDelegate, MessagesDisplay
     return attri
   }
   
+  func messageTopLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
+    if message.sender.senderId == selfSender?.senderId {
+      return 0
+    } else {
+      return 12.i
+    }
+  }
+  
   func messageBottomLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
     guard message.sender.senderId != selfSender?.senderId else { return nil }
     guard indexPath.section == self.messageLog.count - 1 else { return nil }
@@ -421,15 +430,6 @@ extension NewChatVC: MessagesDataSource, MessagesLayoutDelegate, MessagesDisplay
     
     return message.sender.senderId == selfSender?.senderId ? .custom(outGoing) : .custom(inComming)
   }
-  
-  
-  func messageTopLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
-    if message.sender.senderId == selfSender?.senderId {
-      return 0
-    } else {
-      return 20.i
-    }
-  }
 
   func configureAccessoryView(_ accessoryView: UIView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
     accessoryView.subviews.forEach {
@@ -472,8 +472,16 @@ extension NewChatVC: MessagesDataSource, MessagesLayoutDelegate, MessagesDisplay
       }
     }
     
-    guard indexPath.section != self.messageLog.count - 1 else { return }
+    let width = 44.i
+    let lowHeight = 25.i
+    let highHeight = 50.i
+    
+    guard indexPath.section != self.messageLog.count - 1 else {
+//      accessoryView.frame.size = CGSize(width: width, height: lowHeight)
+      accessoryView.frame = CGRect(origin: CGPoint(x: accessoryView.frame.origin.x, y: accessoryView.frame.origin.y - lowHeight), size: CGSize(width: width, height: lowHeight))
+      return }
     if self.messageLog[indexPath.section].translated {
+      accessoryView.frame = CGRect(origin: CGPoint(x: accessoryView.frame.origin.x, y: accessoryView.frame.origin.y - highHeight), size: CGSize(width: width, height: highHeight))
       let iv = UIImageView(image: UIImage(named: "translateOff"))
       accessoryView.addSubview(iv)
       iv.snp.makeConstraints {
@@ -481,6 +489,8 @@ extension NewChatVC: MessagesDataSource, MessagesLayoutDelegate, MessagesDisplay
         $0.bottom.equalTo(unreadCount.snp.top)
         $0.width.height.equalTo(20.i)
       }
+    } else {
+      accessoryView.frame = CGRect(origin: CGPoint(x: accessoryView.frame.origin.x, y: accessoryView.frame.origin.y - lowHeight), size: CGSize(width: width, height: lowHeight))
     }
     
   }
@@ -510,4 +520,5 @@ extension NewChatVC: MessageCellDelegate {
       self.messagesCollectionView.reloadDataAndKeepOffset()
     }
   }
+  
 }
