@@ -137,6 +137,7 @@ open class MessageSizeCalculator: CellSizeCalculator {
             cellHeight += cellTopLabelHeight
             let messageLabelsHeight = messageContainerHeight + messageBottomLabelHeight + messageVerticalPadding + messageTopLabelHeight + cellBottomLabelHeight
             cellHeight += max(messageLabelsHeight, avatarHeight)
+            print("messageContainerHeight: ", messageContainerHeight, " messageBottomLabelHeight: ", messageBottomLabelHeight, " messageVerticalPadding: ", messageVerticalPadding, " messageTopLabelHeight: ", messageTopLabelHeight, " cellBottomLabelHeight: ", cellBottomLabelHeight, " messageLabelsHeight: ", messageLabelsHeight, " avatarHeight: ", avatarHeight, " cellHeight: ", cellHeight, " accessoryViewHeight: ", accessoryViewHeight)
             return max(cellHeight, accessoryViewHeight)
         case .cellTop, .cellBottom:
             let totalLabelHeight: CGFloat = cellTopLabelHeight + messageTopLabelHeight

@@ -21,5 +21,6 @@ target 'DevyTalk' do
   pod 'Firebase/Database'
   pod 'Firebase/Storage'
   pod 'FBSDKLoginKit'
+  pod 'Firebase/Firestore'
 
 end
