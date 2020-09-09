@@ -108,8 +108,8 @@ class FinishNowCC: MessageContentCell {
   
   // MARK: - Methods
   
-      override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
-          super.apply(layoutAttributes)
+//      override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
+//          super.apply(layoutAttributes)
 //          if let attributes = layoutAttributes as? MessagesCollectionViewLayoutAttributes {
 //              messageLabel.textInsets = attributes.messageLabelInsets
 //              messageLabel.messageLabelFont = attributes.messageLabelFont
@@ -117,7 +117,7 @@ class FinishNowCC: MessageContentCell {
 //            messageLabel.frame = CGRect(origin: messageContainerView.bounds.origin, size: CGSize(width: messageContainerView.bounds.width, height: messageContainerView.bounds.height - 65.i))
 
 //          }
-      }
+//      }
   
   //    override func prepareForReuse() {
   //        super.prepareForReuse()
@@ -134,28 +134,28 @@ class FinishNowCC: MessageContentCell {
   private func setupSNP() {
       contentLabel.snp.makeConstraints {
 //        $0.width.equalTo(224.i)
-        $0.centerX.equalToSuperview()
-        $0.leading.trailing.equalToSuperview().inset(10.i)
-        $0.top.equalToSuperview().offset(10.i)
+//        $0.centerX.equalToSuperview()
+        $0.leading.trailing.equalToSuperview().inset(11.i)
+        $0.top.equalToSuperview().offset(9.i)
       }
 
       btn.snp.makeConstraints {
 //        $0.width.equalTo(224.i)
-        $0.top.equalTo(contentLabel.snp.bottom).offset(20.i)
-        $0.centerX.equalToSuperview()
-        $0.leading.trailing.equalToSuperview().inset(10.i)
-//        $0.bottom.equalToSuperview().offset(-9.i)
+//        $0.top.equalTo(contentLabel.snp.bottom).offset(20.i)
+//        $0.centerX.equalToSuperview()
+        $0.leading.trailing.equalToSuperview().inset(11.i)
+        $0.bottom.equalToSuperview().offset(-9.i)
 
       }
     }
   
   override func configure(with message: MessageType, at indexPath: IndexPath, and messagesCollectionView: MessagesCollectionView) {
     super.configure(with: message, at: indexPath, and: messagesCollectionView)
-    if let attri = messagesCollectionView.layoutAttributesForItem(at: indexPath) as? MessagesCollectionViewLayoutAttributes {
-      print("here")
-      print(attri.avatarPosition.vertical)
-      self.apply(attri)
-    }
+//    if let attri = messagesCollectionView.layoutAttributesForItem(at: indexPath) as? MessagesCollectionViewLayoutAttributes {
+//      print("here")
+//      print(attri.avatarPosition.vertical)
+////      self.apply(attri)
+//    }
     
     switch message.kind {
       case .custom(let value):
