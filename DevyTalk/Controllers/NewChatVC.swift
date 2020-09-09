@@ -90,7 +90,7 @@ class NewChatVC: MessagesViewController {
     
     
     messageInputBar.delegate = self
-    self.additionalBottomInset = 45.i
+    self.additionalBottomInset = 20.i
     
     scrollsToBottomOnKeyboardBeginsEditing = true // default false
     maintainPositionOnKeyboardFrameChanged = true // default false
