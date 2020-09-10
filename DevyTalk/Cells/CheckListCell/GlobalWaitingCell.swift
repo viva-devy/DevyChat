@@ -12,6 +12,15 @@ class GlobalWaitingCell: UITableViewCell {
   
   static let identifier = "GlobalWaitingCell"
   
+  var chat: ChatList? {
+    willSet(new) {
+      guard let chat = new else { return }
+      self.hosNameLabel.text = chat.title
+      self.message = chat.lastMessage?.message ?? "-"
+      self.newIV.alpha = chat.cTotalUnreadCount == 0 ? 0 : 1
+    }
+  }
+  
   var message: String = "" {
     willSet(new) {
       let attriString = NSMutableAttributedString(string: new)
@@ -45,7 +54,7 @@ class GlobalWaitingCell: UITableViewCell {
   let newIV: UIImageView = {
     let iv = UIImageView()
     iv.backgroundColor = .clear
-    iv.contentMode = .scaleAspectFit
+    iv.contentMode = .center
     iv.image = UIImage(named: "newPk")
     return iv
   }()
@@ -180,7 +189,7 @@ class GlobalWaitingCell: UITableViewCell {
     newIV.snp.makeConstraints {
       $0.top.equalToSuperview().offset(75.i)
       $0.trailing.equalToSuperview().offset(-20.i)
-      $0.height.equalTo(20.i)
+      $0.height.width.equalTo(24.i)
     }
     
     explainLabel.snp.makeConstraints {

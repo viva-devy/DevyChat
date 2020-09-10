@@ -55,13 +55,13 @@ class NewChatVC: MessagesViewController {
         lef.sentDate < ref.sentDate
       })
     }
-    
-    
+    DatabaseManager.shared.checkReadSign(id: chatID)
   }
   
   private func convertToMessageLog(_ origin: [String: Any]) -> BasicMessageModel {
     let id = origin["m_chatid"] as? String
     let delta = (origin["m_messageDate"] as? [String: Any])?["time"] as? Int ?? 0
+    let offset = (origin["m_messageDate"] as? [String: Any])?["timezoneOffset"] as? Int ?? 0
     let messageId = origin["m_messageId"] as? String
     let type = origin["m_messageType"] as? String
     let user = try? UserData(dictionary: (origin["m_messageUser"] as? [String: Any]) ?? [:])
@@ -70,8 +70,8 @@ class NewChatVC: MessagesViewController {
     let unread = origin["m_unreadCoung"] as? Int
     let message = origin["message"] as? String
     let tm = origin["tm_int"] as? Int
-    
-    return TextMessageModel(ID: id ?? "", date: Date(timeIntervalSince1970: TimeInterval(delta)), messageId: messageId ?? "", type: type ?? "", user: user ?? UserData(), list: list ?? [], unread: unread ?? 0, message: message ?? "", tmInt: tm ?? 0)
+    print(message, delta, offset)
+    return TextMessageModel(ID: id ?? "", date: offset.toCurrentTimeZoneDateWithOffset(Interval: delta), messageId: messageId ?? "", type: type ?? "", user: user ?? UserData(), list: list ?? [], unread: unread ?? 0, message: message ?? "", tmInt: tm ?? 0)
   }
   
   

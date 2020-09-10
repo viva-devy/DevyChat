@@ -301,6 +301,18 @@ extension DatabaseManager {
     }
   }
   
+  func checkReadSign(id: String) {
+    let members = database.child("chat_members").child(id)
+    members.observeSingleEvent(of: .value) {
+      guard let value = $0.value as? [String: Any] else { return }
+      let member = value.keys
+      member.forEach {
+        let userRef = self.database.child("users").child($0).child("chats").child(id)
+        userRef.child("c_totalUnreadCount").setValue(0)
+      }
+    }
+  }
+  
   private func addChatList(chatRef: DatabaseReference, completion: @escaping (String) -> ()) {
     chatRef.ref.child("title").observe(.value) { (snap) in
       guard let title = snap.value as? String else { return }
@@ -462,7 +474,11 @@ extension DatabaseManager {
      
     guard let childKey = chatMemberRef.key else { return }
     
-//    database.child("tempRef").child(childKey).setValue(["date": Timestamp()])
+//    let now = Date().toMessageDate()
+//    let nowData = (try? JSONEncoder().encode(now)) ?? Data()
+//    let nowTemp = (try? JSONSerialization.jsonObject(with: nowData, options: .allowFragments)).flatMap { $0 as? [String: Any] }
+//
+//    database.child("tempRef").child(childKey).setValue(nowTemp ?? [:])
     
     let mDate = Date().toMessageDate()
     
@@ -483,6 +499,8 @@ extension DatabaseManager {
       print("mDateJson is nil")
       return }
     
+    
+    
     let sendMessage: [String: Any] = [
       "m_chatid": chatID,
       "m_messageDate": mDateJson,
@@ -490,25 +508,39 @@ extension DatabaseManager {
       "m_messageType": "TEXT", //수정해줘야함.
       "m_messageUser": userJson,
       "m_readUserList": [UserMe.shared.user.docID ?? "Error"],
-      "m_unreadCoung": 0, // 수정해야함.
+      "m_unreadCount": 0, // setLastMessage 에서 수정함.
       "message": text,
       "tm_int": 0
     ]
     
-    chatMemberRef.setValue(sendMessage)
-    self.setLastMessage(chatID: chatID, lastMessage: sendMessage, userName: lastUser.docNAME ?? "Error")
+    
+    self.setLastMessage(chatID: chatID, lastMessage: sendMessage, userName: lastUser.docNAME ?? "Error") {
+      chatMemberRef.setValue($0)
+    }
     
   }
   
-  private func setLastMessage(chatID: String, lastMessage: [String: Any], userName: String) {
+  private func setLastMessage(chatID: String, lastMessage: [String: Any], userName: String, completion: @escaping ([String: Any]) -> ()) {
     let members = database.child("chat_members").child(chatID)
     members.observeSingleEvent(of: .value) {
       guard let value = $0.value as? [String: Any] else { return }
       let member = value.keys
-      member.forEach {
-        let userRef = self.database.child("users").child($0).child("chats").child(chatID).child("lastMessage")
-        userRef.setValue(lastMessage)
-        self.database.child("users").child($0).child("chats").child(chatID).child("title").setValue(userName)
+      var message = lastMessage
+      message.updateValue(member.count - 1, forKey: "m_unreadCount")
+      completion(message)
+      
+      member.forEach { key in
+        let userRef = self.database.child("users").child(key).child("chats").child(chatID)
+        userRef.child("lastMessage").setValue(message)
+        userRef.child("title").setValue(userName)
+        
+        if key != UserMe.shared.user.docID {
+          userRef.child("c_totalUnreadCount").runTransactionBlock { (data) -> TransactionResult in
+            let totalUnreadCount = (data.value as? Int) ?? 0
+            data.value = totalUnreadCount + 1
+            return .success(withValue: data)
+          }
+        }
       }
     }
   }
