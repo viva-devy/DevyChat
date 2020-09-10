@@ -84,22 +84,22 @@ extension DatabaseManager {
       if !snapshop.exists() {
         print("존재 안함")
           let newelement = [
-            "call_DATE": "0",          // 앱에서는 사용안함 default
-            "country": "KR",
-            "check": false,
-            "doc_BIRTH": "19901218",
+            "call_DATE": user.callDATE,          // 앱에서는 사용안함 default
+            "country": user.country,
+            "check": user.check,
+            "doc_BIRTH": user.docBIRTH,
             "doc_EMAIL": user.docEMAIL,
-            "doc_GENDER": 2,           // 1이면 남, 2면 여
+            "doc_GENDER": user.docGENDER,           // 1이면 남, 2면 여
             "doc_ID": user.docID,      //사용자 UID
             "doc_NAME": user.docNAME,          // 내 이름
-            "doc_PHONE": "01012345678",
-            "doc_PIC": "0",            // 사용자 프로필 Url - 수집안함
-            "doc_POSITION": "환자",     // 앱에서는 환자 default
-            "hos_ID": "0",             // 사용자 소속 병원키 - 환자는 "0",
-            "hos_NAME": "0",            // 사용자 소속 병원 - 환자는 "0"
+            "doc_PHONE": user.docPHONE,
+            "doc_PIC": user.docPIC,            // 사용자 프로필 Url - 수집안함
+            "doc_POSITION": user.docPOSITION,     // 앱에서는 환자 default
+            "hos_ID": user.hosID,             // 사용자 소속 병원키 - 환자는 "0",
+            "hos_NAME": user.hosNAME,            // 사용자 소속 병원 - 환자는 "0"
             "remote_STATE": -1,         // 비대면에서사용
             "reser_DATE": "0",          // 비대면에서사용
-            "tf_DOC": 99,               // 99환자 디폴트
+            "tf_DOC": user.tfDOC,               // 99환자 디폴트
             ] as [String : Any]
       
           ref.setValue(newelement, withCompletionBlock: { error, _ in
@@ -234,7 +234,7 @@ extension DatabaseManager {
     
     userArr.forEach {
       database.child("users").child($0).observeSingleEvent(of: .value) { (snap) in
-        if let dict = snap.value as? [String: Any] {
+        if var dict = snap.value as? [String: Any] {
           
           if let userID = dict["doc_ID"] as? String {
             
@@ -254,7 +254,7 @@ extension DatabaseManager {
               print("chatListJson is nil")
               return }
             
-            
+            dict.removeValue(forKey: "chats")
             chatMemberRef.child(userID).setValue(dict) { (err, dbRef) in
               guard err == nil else {
                 print(err?.localizedDescription)

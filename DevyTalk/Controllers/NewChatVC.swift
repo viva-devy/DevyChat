@@ -60,19 +60,36 @@ class NewChatVC: MessagesViewController {
   
   private func convertToMessageLog(_ origin: [String: Any]) -> BasicMessageModel {
     let id = origin["m_chatid"] as? String
-    let delta = (origin["m_messageDate"] as? [String: Any])?["time"] as? Int ?? 0
-    let offset = (origin["m_messageDate"] as? [String: Any])?["timezoneOffset"] as? Int ?? 0
+//    let delta = (origin["m_messageDate"] as? [String: Any])?["time"] as? Int ?? 0
+//    let offset = (origin["m_messageDate"] as? [String: Any])?["timezoneOffset"] as? Int ?? 0
+    let date = origin["m_messageDate"] as? [String: Any] ?? [:]
     let messageId = origin["m_messageId"] as? String
     let type = origin["m_messageType"] as? String
     let user = try? UserData(dictionary: (origin["m_messageUser"] as? [String: Any]) ?? [:])
     // [String: Any]타입의 딕셔너리로 Userdata를 생성한다.
     let list = origin["m_readUserList"] as? [String]
-    let unread = origin["m_unreadCoung"] as? Int
+    let unread = origin["m_unreadCount"] as? Int
     let message = origin["message"] as? String
     let tm = origin["tm_int"] as? Int
-    print(message, delta, offset)
-    return TextMessageModel(ID: id ?? "", date: offset.toCurrentTimeZoneDateWithOffset(Interval: delta), messageId: messageId ?? "", type: type ?? "", user: user ?? UserData(), list: list ?? [], unread: unread ?? 0, message: message ?? "", tmInt: tm ?? 0)
+//    print(message, delta, offset)
+    return TextMessageModel(ID: id ?? "", date: toDate(data: date), messageId: messageId ?? "", type: type ?? "", user: user ?? UserData(), list: list ?? [], unread: unread ?? 0, message: message ?? "", tmInt: tm ?? 0)
   }
+  
+  func toDate(data: [String: Any]) -> Date {
+    guard let messageDate = try? JSONDecoder().decode(MessageDate.self, from: JSONSerialization.data(withJSONObject: data)) else { return Date() }
+    guard let messageTZ = TimeZone(secondsFromGMT: -(messageDate.timezoneOffset * 60))
+      else { return Date() }
+    
+    let formatter = DateFormatter()
+    formatter.timeZone = messageTZ
+    formatter.dateFormat = "yyyyMMddHHmmss"
+    let mDateStr = "\(messageDate.year + 1900)" + messageDate.month.fillZero() + messageDate.date.fillZero() + messageDate.hours.fillZero() + messageDate.minutes.fillZero() + messageDate.seconds.fillZero()
+    let mDate = formatter.date(from: mDateStr) ?? Date()
+    
+    return Calendar.current.dateBySetting(timeZone: TimeZone.autoupdatingCurrent, of: mDate) ?? Date()
+  }
+  
+  
   
   
   
