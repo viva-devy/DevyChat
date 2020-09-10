@@ -337,7 +337,7 @@ extension NewChatVC: MessagesDataSource, MessagesLayoutDelegate, MessagesDisplay
   }
   
   func backgroundColor(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor {
-    return .appColor(message.sender.senderId == selfSender?.senderId ? .aPp : .whiteTwo)
+    return .appColor(message.sender.senderId == selfSender?.senderId ? .perryWinkle : .whiteTwo)
   }
   
   func currentSender() -> SenderType {
@@ -389,7 +389,7 @@ extension NewChatVC: MessagesDataSource, MessagesLayoutDelegate, MessagesDisplay
     let font = UIFont(name: "NanumSquareB", size: 11.i) ?? UIFont()
 
     attri.addAttribute(.font, value: font, range: NSRange(location: 0, length: " 번역하기".count))
-    let setColor = trans ? UIColor.appColor(.gr1) : UIColor.appColor(.aPp)
+    let setColor = trans ? UIColor.appColor(.gr1) : UIColor.appColor(.perryWinkle)
     attri.addAttribute(.foregroundColor, value: setColor, range: NSRange(location: 0, length: " 번역하기".count))
     attri.addAttribute(.baselineOffset, value: 5.i, range: NSRange(location: 0, length: " 번역하기".count))
     
