@@ -66,6 +66,7 @@
 		31F8608E24FF5E3C00196219 /* InfoWaitingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31F8608D24FF5E3C00196219 /* InfoWaitingCell.swift */; };
 		31F860912500ECB000196219 /* BasicMessageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31F860902500ECB000196219 /* BasicMessageModel.swift */; };
 		31F860932500EDCC00196219 /* TextMessageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31F860922500EDCC00196219 /* TextMessageModel.swift */; };
+		408962252509D4EA00E38B6B /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 408962242509D4EA00E38B6B /* String.swift */; };
 		40A4CD36250630E700777734 /* Trans.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40A4CD35250630E700777734 /* Trans.swift */; };
 		40AB19E62504041B004C238A /* FinishNowCC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40AB19E52504041B004C238A /* FinishNowCC.swift */; };
 		40AB19E8250405AA004C238A /* CustomMessagesSizeCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40AB19E7250405AA004C238A /* CustomMessagesSizeCalculator.swift */; };
@@ -134,6 +135,7 @@
 		31F8608D24FF5E3C00196219 /* InfoWaitingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoWaitingCell.swift; sourceTree = "<group>"; };
 		31F860902500ECB000196219 /* BasicMessageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicMessageModel.swift; sourceTree = "<group>"; };
 		31F860922500EDCC00196219 /* TextMessageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextMessageModel.swift; sourceTree = "<group>"; };
+		408962242509D4EA00E38B6B /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		40A4CD35250630E700777734 /* Trans.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trans.swift; sourceTree = "<group>"; };
 		40AB19E52504041B004C238A /* FinishNowCC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinishNowCC.swift; sourceTree = "<group>"; };
 		40AB19E7250405AA004C238A /* CustomMessagesSizeCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomMessagesSizeCalculator.swift; sourceTree = "<group>"; };
@@ -315,6 +317,7 @@
 				3152DF7D24F4F4AB00FCF86D /* Int.swift */,
 				3152DF7F24F4F4BD00FCF86D /* Notification.swift */,
 				3142163624F8033E00E7E0C9 /* Date.swift */,
+				408962242509D4EA00E38B6B /* String.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -520,6 +523,7 @@
 				31F8607F24FE393F00196219 /* ChatListView.swift in Sources */,
 				3152DF9324F4F57700FCF86D /* ConversationsViewController.swift in Sources */,
 				3152DF7A24F4F48900FCF86D /* UIColor.swift in Sources */,
+				408962252509D4EA00E38B6B /* String.swift in Sources */,
 				3152DFA324F4F66B00FCF86D /* ChatView.swift in Sources */,
 				3152DFA924F4F6C300FCF86D /* ConversationCell.swift in Sources */,
 				3152DF8024F4F4BD00FCF86D /* Notification.swift in Sources */,

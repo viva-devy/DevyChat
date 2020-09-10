@@ -237,9 +237,7 @@ extension ChatListVC: UITableViewDataSource {
 
         // 채팅한 방이 있으면 여기로
         let cell = tableView.dequeueReusableCell(withIdentifier: GlobalWaitingCell.identifier, for: indexPath) as! GlobalWaitingCell
-        let chat = chatList[indexPath.row]
-        cell.hosNameLabel.text = chat.title
-        cell.message = chat.lastMessage?.message ?? "-"
+        cell.chat = chatList[indexPath.row]
         cell.selectionStyle = .none
         return cell
       }
