@@ -35,6 +35,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     // Override point for customization after application launch.
     FirebaseApp.configure()
     
+    ["20200906".toDate(), "20200907".toDate(), "20200908".toDate(), "20200909".toDate(), "20200910".toDate(), "20200911".toDate(), "20200912".toDate(), "20200913".toDate()].forEach {
+      print($0)
+    }
+    
     // fb
     ApplicationDelegate.shared.application( application, didFinishLaunchingWithOptions: launchOptions )
     

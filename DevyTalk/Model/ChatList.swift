@@ -71,9 +71,9 @@ struct Last: Codable {
 
 // MARK: - MessageDate
 struct MessageDate: Codable {
-    let date, day, hours, minutes: Int?
-    let month, seconds, time, timezoneOffset: Int?
-    let year: Int?
+  let date, day, hours, minutes: Int
+  let month, seconds, time, timezoneOffset: Int
+  let year: Int
 }
 
 
