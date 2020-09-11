@@ -15,6 +15,8 @@ class NewChatVC: MessagesViewController {
   
   var chatID: String = ""
   
+  var isSelect: Bool = false
+  
   var hosData: (String, String) = ("", "")        //(chatUser.hosID ?? "hosID", chatUser.hosNAME ?? "hosName")
   
   var messageLog: [BasicMessageModel] = [] {      // 메세지 보낸 기록이 있는 화면
@@ -60,19 +62,36 @@ class NewChatVC: MessagesViewController {
   
   private func convertToMessageLog(_ origin: [String: Any]) -> BasicMessageModel {
     let id = origin["m_chatid"] as? String
-    let delta = (origin["m_messageDate"] as? [String: Any])?["time"] as? Int ?? 0
-    let offset = (origin["m_messageDate"] as? [String: Any])?["timezoneOffset"] as? Int ?? 0
+//    let delta = (origin["m_messageDate"] as? [String: Any])?["time"] as? Int ?? 0
+//    let offset = (origin["m_messageDate"] as? [String: Any])?["timezoneOffset"] as? Int ?? 0
+    let date = origin["m_messageDate"] as? [String: Any] ?? [:]
     let messageId = origin["m_messageId"] as? String
     let type = origin["m_messageType"] as? String
     let user = try? UserData(dictionary: (origin["m_messageUser"] as? [String: Any]) ?? [:])
     // [String: Any]타입의 딕셔너리로 Userdata를 생성한다.
     let list = origin["m_readUserList"] as? [String]
-    let unread = origin["m_unreadCoung"] as? Int
+    let unread = origin["m_unreadCount"] as? Int
     let message = origin["message"] as? String
     let tm = origin["tm_int"] as? Int
-    print(message, delta, offset)
-    return TextMessageModel(ID: id ?? "", date: offset.toCurrentTimeZoneDateWithOffset(Interval: delta), messageId: messageId ?? "", type: type ?? "", user: user ?? UserData(), list: list ?? [], unread: unread ?? 0, message: message ?? "", tmInt: tm ?? 0)
+//    print(message, delta, offset)
+    return TextMessageModel(ID: id ?? "", date: toDate(data: date), messageId: messageId ?? "", type: type ?? "", user: user ?? UserData(), list: list ?? [], unread: unread ?? 0, message: message ?? "", tmInt: tm ?? 0)
   }
+  
+  func toDate(data: [String: Any]) -> Date {
+    guard let messageDate = try? JSONDecoder().decode(MessageDate.self, from: JSONSerialization.data(withJSONObject: data)) else { return Date() }
+    guard let messageTZ = TimeZone(secondsFromGMT: -(messageDate.timezoneOffset * 60))
+      else { return Date() }
+    
+    let formatter = DateFormatter()
+    formatter.timeZone = messageTZ
+    formatter.dateFormat = "yyyyMMddHHmmss"
+    let mDateStr = "\(messageDate.year + 1900)" + messageDate.month.fillZero() + messageDate.date.fillZero() + messageDate.hours.fillZero() + messageDate.minutes.fillZero() + messageDate.seconds.fillZero()
+    let mDate = formatter.date(from: mDateStr) ?? Date()
+    
+    return Calendar.current.dateBySetting(timeZone: TimeZone.autoupdatingCurrent, of: mDate) ?? Date()
+  }
+  
+  
   
   
   
@@ -180,7 +199,7 @@ class NewChatVC: MessagesViewController {
     // or MiddleContentView padding 또는 MiddleContentView 패딩
     messageInputBar.middleContentViewPadding.right = -40.i
     messageInputBar.middleContentViewPadding.bottom = -20.i
-    messageInputBar.middleContentViewPadding.left = 14.i
+    messageInputBar.middleContentViewPadding.left = 8.i
     
     // or InputTextView padding 또는 InputTextView 패딩 - 텍스트 바텀
     messageInputBar.inputTextView.textContainerInset.bottom = 12.i
@@ -194,12 +213,18 @@ class NewChatVC: MessagesViewController {
     maintainPositionOnKeyboardFrameChanged = true
     messageInputBar.leftStackView.isUserInteractionEnabled = true
     let button = InputBarButtonItem()
-    button.imageEdgeInsets = UIEdgeInsets(top: 0.i, left: 0, bottom: 0.i, right: -5.i)
+    button.imageEdgeInsets = UIEdgeInsets(top: 0.i, left: 0, bottom: 0.i, right: 5.i)
     button.setSize(CGSize(width: 40.i, height: 40.i), animated: false)
     button.setImage(UIImage(named: "add"), for: .normal)
-    button.onTouchUpInside { [weak self] _ in
-      print("add button ")
-      self?.configureMessageInputBarForChat()
+    button.clipsToBounds = true
+    button.contentMode = .scaleAspectFill
+    button.onTouchUpInside { [weak self] btn in
+      btn.isSelected.toggle()
+      if btn.isSelected {
+        self?.configureMessageInputBarForChat(btn)
+      } else {
+        self?.hideMessageInputBarForChat(btn)
+      }
     }
     
     messageInputBar.setLeftStackViewWidthConstant(to: 25.i, animated: false)
@@ -208,7 +233,16 @@ class NewChatVC: MessagesViewController {
   }
   
   // add버튼 눌렀을때 action
-  private func configureMessageInputBarForChat() {
+  @objc private func configureMessageInputBarForChat(_ sender: UIButton) {
+    self.messageInputBar.inputTextView.becomeFirstResponder()
+    scrollsToBottomOnKeyboardBeginsEditing = true
+    maintainPositionOnKeyboardFrameChanged = true
+    
+    print("aaaaaaaaa: ",scrollsToBottomOnKeyboardBeginsEditing)
+    print("bbbbbbbbb: ",maintainPositionOnKeyboardFrameChanged)
+    
+    
+    
     
     messageInputBar.setMiddleContentView(messageInputBar.inputTextView, animated: false)
     
@@ -225,6 +259,7 @@ class NewChatVC: MessagesViewController {
     bottomItems[2].onTouchUpInside { [weak self] _ in
       self?.didTapFileIV()
     }
+    
   }
   
   // 3개 버튼
@@ -240,9 +275,13 @@ class NewChatVC: MessagesViewController {
         $0.setSize(CGSize(width: 48.i, height: 70.i), animated: false)
         $0.sizeToFit()
     }
-    .onTouchUpInside { _ in
-      print("Item Tapped")
-    }
+    
+  }
+  
+  @objc private func hideMessageInputBarForChat(_ sender: UIButton) {
+    messageInputBar.setMiddleContentView(messageInputBar.inputTextView, animated: false)
+    messageInputBar.setStackViewItems([], forStack: .bottom, animated: false)
+          
   }
   
   private func presentPhotoInputActionsheet() {
@@ -341,13 +380,7 @@ class NewChatVC: MessagesViewController {
   }
   
   
-  private func hideMessageInputBarForChat() {
-    messageInputBar.setMiddleContentView(messageInputBar.inputTextView, animated: false)
-    //    messageInputBar.setRightStackViewWidthConstant(to: 52, animated: false)
-    //    let bottomItems = [makeButton(named: "album"), makeButton(named: "camera"), makeButton(named: "file"),.flexibleSpace]
-    //    messageInputBar.setStackViewItems(bottomItems, forStack: .bottom, animated: false)
-    messageInputBar.isHidden = true
-  }
+
   
   override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     guard let dataSource = messagesCollectionView.messagesDataSource else { return UICollectionViewCell() }

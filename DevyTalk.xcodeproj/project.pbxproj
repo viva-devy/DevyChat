@@ -71,6 +71,7 @@
 		40AB19E62504041B004C238A /* FinishNowCC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40AB19E52504041B004C238A /* FinishNowCC.swift */; };
 		40AB19E8250405AA004C238A /* CustomMessagesSizeCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40AB19E7250405AA004C238A /* CustomMessagesSizeCalculator.swift */; };
 		40AB19EA25040722004C238A /* CustomMessageFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40AB19E925040722004C238A /* CustomMessageFlowLayout.swift */; };
+		52B984EB250A85A500FA7ADD /* Calendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52B984EA250A85A500FA7ADD /* Calendar.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -140,6 +141,7 @@
 		40AB19E52504041B004C238A /* FinishNowCC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinishNowCC.swift; sourceTree = "<group>"; };
 		40AB19E7250405AA004C238A /* CustomMessagesSizeCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomMessagesSizeCalculator.swift; sourceTree = "<group>"; };
 		40AB19E925040722004C238A /* CustomMessageFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomMessageFlowLayout.swift; sourceTree = "<group>"; };
+		52B984EA250A85A500FA7ADD /* Calendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Calendar.swift; sourceTree = "<group>"; };
 		5DFA043F0DB8B76134F0E1C5 /* Pods_DevyTalk.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DevyTalk.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		88E94BB678BC680E82024026 /* Pods-DevyTalk.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DevyTalk.debug.xcconfig"; path = "Target Support Files/Pods-DevyTalk/Pods-DevyTalk.debug.xcconfig"; sourceTree = "<group>"; };
 		F6E7C5C6EAA4D4E6E2A8EF2F /* Pods-DevyTalk.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DevyTalk.release.xcconfig"; path = "Target Support Files/Pods-DevyTalk/Pods-DevyTalk.release.xcconfig"; sourceTree = "<group>"; };
@@ -318,6 +320,7 @@
 				3152DF7F24F4F4BD00FCF86D /* Notification.swift */,
 				3142163624F8033E00E7E0C9 /* Date.swift */,
 				408962242509D4EA00E38B6B /* String.swift */,
+				52B984EA250A85A500FA7ADD /* Calendar.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -517,6 +520,7 @@
 				3142162B24F558A800E7E0C9 /* DatabaseManager.swift in Sources */,
 				3142162F24F61F6500E7E0C9 /* StorageManager.swift in Sources */,
 				3152DFB124F4F74D00FCF86D /* VideoPlayerViewController.swift in Sources */,
+				52B984EB250A85A500FA7ADD /* Calendar.swift in Sources */,
 				31F8608A24FEA17B00196219 /* AppointmentCell.swift in Sources */,
 				3152DFAB24F4F71300FCF86D /* ChatViewController.swift in Sources */,
 				31F8608E24FF5E3C00196219 /* InfoWaitingCell.swift in Sources */,
