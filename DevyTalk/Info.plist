@@ -4,12 +4,14 @@
 <dict>
 	<key>UIUserInterfaceStyle</key>
 	<string>Light</string>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Please allow access to select a photo for your profile.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Please allow access to take a profile picture</string>
+	<string>채팅에 필요한 사진을 촬영합니다.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Please allow access to send audio and video messages.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>채팅방에 사진 및 멀티미디어 파일을 전송합니다.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>채팅방에 사진 및 멀티미디어 파일을 전송합니다.</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>

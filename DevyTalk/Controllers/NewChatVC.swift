@@ -24,10 +24,11 @@ class NewChatVC: MessagesViewController {
       DispatchQueue.main.async {
         self.messagesCollectionView.reloadData()
         self.messagesCollectionView.scrollToBottom()
-        self.messageInputBar.inputTextView.becomeFirstResponder()
         self.configureMessageInputBar()
-        //        self.setupInputButton()
-        //        self.messagesCollectionView.reloadDataAndKeepOffset()
+//        self.messageInputBar.inputTextView.becomeFirstResponder()
+       
+//        self.setupInputButton()
+//        self.messagesCollectionView.reloadDataAndKeepOffset()
         
       }
     }
@@ -41,11 +42,14 @@ class NewChatVC: MessagesViewController {
     return Sender(senderId: id, displayName: "Me")
   }
   
+
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     view.backgroundColor = .appColor(.lgr1)
     setupNavi()
     checkFirst()
+
     guard chatID != "" else {
       print("chatID is empty")
       self.navigationController?.popViewController(animated: true)
@@ -58,8 +62,23 @@ class NewChatVC: MessagesViewController {
       })
     }
     DatabaseManager.shared.checkReadSign(id: chatID)
+    
+    self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap(_:))))
+    messagesCollectionView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap(_:))))
+    
+    
   }
   
+  override func viewDidLayoutSubviews() {
+    super.viewDidLayoutSubviews()
+    
+    scrollsToBottomOnKeyboardBeginsEditing = true
+    maintainPositionOnKeyboardFrameChanged = true
+    
+    
+    
+  }
+
   private func convertToMessageLog(_ origin: [String: Any]) -> BasicMessageModel {
     let id = origin["m_chatid"] as? String
 //    let delta = (origin["m_messageDate"] as? [String: Any])?["time"] as? Int ?? 0
@@ -93,8 +112,6 @@ class NewChatVC: MessagesViewController {
   
   
   
-  
-  
   // 보낸기록이 있는지 확인
   private func getChatLog(chatID: String, completion: @escaping ([String: [String: Any]]) -> ()) {
     DatabaseManager.shared.getChatLog(id: chatID, completion: completion)
@@ -114,12 +131,6 @@ class NewChatVC: MessagesViewController {
     messageInputBar.delegate = self
     self.additionalBottomInset = 20.i
     messageInputBar.separatorLine.isHidden = true
-    //    messageInputBar.inputTextView.frame = CGRect(x: 45.i, y: 0, width: 320.i, height: 45.i)
-    print("messageInputBar.inputTextView.frame: ", messageInputBar.inputTextView.frame)
-    
-    
-    scrollsToBottomOnKeyboardBeginsEditing = true // default false
-    maintainPositionOnKeyboardFrameChanged = true // default false
     
     if let layout = messagesCollectionView.collectionViewLayout as? MessagesCollectionViewFlowLayout {
       let customCalculator = CustomMessageSizeCalculator(layout: layout)
@@ -147,6 +158,8 @@ class NewChatVC: MessagesViewController {
       
     }
   }
+  
+
   
   func configureMessageInputBar() {
     messageInputBar.middleContentViewPadding = UIEdgeInsets(top: 0.i, left: 0.i, bottom: 0.i, right: 10.i)
@@ -176,7 +189,7 @@ class NewChatVC: MessagesViewController {
     messageInputBar.sendButton.contentEdgeInsets = UIEdgeInsets(top: 0.i, left: 0.i, bottom: 0.i, right: 0.i)
     messageInputBar.sendButton.setSize(CGSize(width: 36.i, height: 36.i), animated: false)
     messageInputBar.sendButton.contentMode = .scaleAspectFill
-    messageInputBar.sendButton.image = #imageLiteral(resourceName: "send")
+    messageInputBar.sendButton.image = UIImage(named: "send")
     messageInputBar.sendButton.title = nil
     let charCountButton = InputBarButtonItem()
       .onTextViewDidChange { (item, textView) in
@@ -209,23 +222,38 @@ class NewChatVC: MessagesViewController {
   }
   
   private func setupInputButton() {
-    scrollsToBottomOnKeyboardBeginsEditing = true // default false
-    maintainPositionOnKeyboardFrameChanged = true
     messageInputBar.leftStackView.isUserInteractionEnabled = true
     let button = InputBarButtonItem()
     button.imageEdgeInsets = UIEdgeInsets(top: 0.i, left: 0, bottom: 0.i, right: 5.i)
     button.setSize(CGSize(width: 40.i, height: 40.i), animated: false)
     button.setImage(UIImage(named: "add"), for: .normal)
+    button.setImage(UIImage(named: "xbtn"), for: .selected)
     button.clipsToBounds = true
     button.contentMode = .scaleAspectFill
+    
     button.onTouchUpInside { [weak self] btn in
       btn.isSelected.toggle()
       if btn.isSelected {
+        self?.scrollsToBottomOnKeyboardBeginsEditing = true
+        self?.maintainPositionOnKeyboardFrameChanged = true
+        
         self?.configureMessageInputBarForChat(btn)
+        self?.messageInputBar.inputTextView.becomeFirstResponder()
+        btn.onSelected { [weak self] (b) in
+          self?.messageInputBar.inputTextView.resignFirstResponder()
+        }
       } else {
+        self?.scrollsToBottomOnKeyboardBeginsEditing = true
+        self?.maintainPositionOnKeyboardFrameChanged = true
         self?.hideMessageInputBarForChat(btn)
+        self?.messageInputBar.inputTextView.becomeFirstResponder()
+        btn.onSelected { [weak self] (b) in
+          self?.messageInputBar.inputTextView.resignFirstResponder()
+        }
       }
+
     }
+    
     
     messageInputBar.setLeftStackViewWidthConstant(to: 25.i, animated: false)
     messageInputBar.setStackViewItems([button], forStack: .left, animated: false)
@@ -234,16 +262,8 @@ class NewChatVC: MessagesViewController {
   
   // add버튼 눌렀을때 action
   @objc private func configureMessageInputBarForChat(_ sender: UIButton) {
-    self.messageInputBar.inputTextView.becomeFirstResponder()
-    scrollsToBottomOnKeyboardBeginsEditing = true
-    maintainPositionOnKeyboardFrameChanged = true
-    
-    print("aaaaaaaaa: ",scrollsToBottomOnKeyboardBeginsEditing)
-    print("bbbbbbbbb: ",maintainPositionOnKeyboardFrameChanged)
-    
-    
-    
-    
+    print("add did Tap")
+    messageInputBar.inputTextView.resignFirstResponder()
     messageInputBar.setMiddleContentView(messageInputBar.inputTextView, animated: false)
     
     let bottomItems = [makeButton(named: "album"), makeButton(named: "camera"), makeButton(named: "file"), .flexibleSpace]
@@ -266,94 +286,56 @@ class NewChatVC: MessagesViewController {
   private func makeButton(named: String) -> InputBarButtonItem {
     return InputBarButtonItem()
       .configure {
-        messageInputBar.middleContentViewPadding.bottom = 15.i
+        messageInputBar.middleContentViewPadding.bottom = 10.i  // 15
         $0.spacing = .fixed(55.i)
-        $0.titleEdgeInsets = UIEdgeInsets(top: 25.i, left: 0, bottom: 15.i, right: 0)
+        $0.titleEdgeInsets = UIEdgeInsets(top: 20.i, left: 0, bottom: 20.i, right: 0)
         $0.imageEdgeInsets = UIEdgeInsets(top: 0, left: 30.i, bottom: 0, right: 0)
         $0.backgroundColor = .clear
         $0.image = UIImage(named: named)
-        $0.setSize(CGSize(width: 48.i, height: 70.i), animated: false)
+        $0.setSize(CGSize(width: 49.i, height: 49.i), animated: false)
         $0.sizeToFit()
     }
     
   }
   
   @objc private func hideMessageInputBarForChat(_ sender: UIButton) {
+    messageInputBar.middleContentViewPadding.bottom = 0
     messageInputBar.setMiddleContentView(messageInputBar.inputTextView, animated: false)
     messageInputBar.setStackViewItems([], forStack: .bottom, animated: false)
           
   }
   
-  private func presentPhotoInputActionsheet() {
-    let actionSheet = UIAlertController(title: "Attach Photo",
-                                        message: "Where would you like to attach a photo from",
-                                        preferredStyle: .alert)
-    actionSheet.addAction(UIAlertAction(title: "Camera", style: .default, handler: { [weak self] _ in
-      
-      let picker = UIImagePickerController()
-      picker.sourceType = .camera
-      picker.delegate = self
-      picker.allowsEditing = true
-      self?.present(picker, animated: true)
-      
-    }))
-    actionSheet.addAction(UIAlertAction(title: "Photo Library", style: .default, handler: { [weak self] _ in
-      
-      let picker = UIImagePickerController()
-      picker.sourceType = .photoLibrary
-      picker.delegate = self
-      picker.allowsEditing = true
-      self?.present(picker, animated: true)
-      
-    }))
-    actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-    
-    present(actionSheet, animated: true)
-  }
-  
   @objc func didTapAlbumIV() {
     print("didTapAlbumIV")
-    let actionSheet = UIAlertController(title: "Attach Photo",
-                                        message: "Where would you like to attach a photo from",
-                                        preferredStyle: .alert)
     
-    actionSheet.addAction(UIAlertAction(title: "Photo Library", style: .default, handler: { [weak self] _ in
-      
-      let picker = UIImagePickerController()
-      picker.sourceType = .photoLibrary
-      picker.delegate = self
-      picker.allowsEditing = true
-      self?.present(picker, animated: true)
-      
-    }))
-    actionSheet.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
-    
-    present(actionSheet, animated: true)
+    let picker = UIImagePickerController()
+    picker.sourceType = .photoLibrary
+    picker.delegate = self
+    picker.allowsEditing = true
+    present(picker, animated: true)
     
   }
   
   @objc func didTapCameraIV() {
     print("didTapcameraIV")
-    let actionSheet = UIAlertController(title: "Attach Photo",
-                                        message: "Where would you like to attach a photo from",
-                                        preferredStyle: .alert)
     
-    actionSheet.addAction(UIAlertAction(title: "Camera", style: .default, handler: { [weak self] _ in
-      
-      let picker = UIImagePickerController()
-      picker.sourceType = .camera
-      picker.delegate = self
-      picker.allowsEditing = true
-      self?.present(picker, animated: true)
-      
-    }))
-    actionSheet.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
-    
-    present(actionSheet, animated: true)
+    let picker = UIImagePickerController()
+    picker.sourceType = .camera
+    picker.delegate = self
+    picker.allowsEditing = true
+    present(picker, animated: true)
   }
   
   @objc func didTapFileIV() {
     print("didTapFileIV")
+    
+  }
+  
+  @objc func handleTap(_ sender: UITapGestureRecognizer) {
+    if sender.state == .ended {
+      self.view.endEditing(true)
+    }
+    sender.cancelsTouchesInView = false
   }
   
   private func setupNavi() {
@@ -378,9 +360,6 @@ class NewChatVC: MessagesViewController {
   @objc func rightBtnDidTap(_ sender: UIButton) {
     print("번역")
   }
-  
-  
-
   
   override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     guard let dataSource = messagesCollectionView.messagesDataSource else { return UICollectionViewCell() }
@@ -420,11 +399,10 @@ extension NewChatVC: FinishNowCCDelegate {
 
 extension NewChatVC: InputBarAccessoryViewDelegate {
   func inputBar(_ inputBar: InputBarAccessoryView, didPressSendButtonWith text: String) {
+    print("did Press Send button")
     guard text != "" else { return }
     
     inputBar.inputTextView.text = ""
-    //    inputBar.contentView = CustomInputBar()
-    
     inputBar.backgroundColor = .appColor(.lgr1)
     inputBar.inputTextView.backgroundColor = .appColor(.whiteTwo)
     inputBar.separatorLine.isHidden = true
@@ -435,11 +413,11 @@ extension NewChatVC: InputBarAccessoryViewDelegate {
     attri.addAttribute(.font, value: font, range: NSRange(location: 0, length: inputBar.inputTextView.text.count))
     attri.addAttribute(.foregroundColor, value: UIColor.appColor(.gr2), range: NSRange(location: 0, length: inputBar.inputTextView.text.count))
     
+
     
     DatabaseManager.shared.sendMessage(text: text, chatID: chatID)
   }
-  
-  
+
   
 }
 
@@ -509,6 +487,7 @@ extension NewChatVC: MessagesDataSource, MessagesLayoutDelegate, MessagesDisplay
     
     return attri
   }
+
   
   func messageBottomLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
     guard indexPath.section == self.messageLog.count - 1 else { return 0 }
@@ -527,7 +506,6 @@ extension NewChatVC: MessagesDataSource, MessagesLayoutDelegate, MessagesDisplay
       view.layer.cornerRadius = 12.i
     }
     
-//    messageInputBar.tintColor = .appColor(.perryWinkle)
     messageInputBar.inputTextView.layer.borderWidth = CGFloat(0.5).iOS
     messageInputBar.inputTextView.layer.cornerRadius = 8.i
     messageInputBar.inputTextView.placeholder = " Message.."
@@ -637,7 +615,7 @@ extension NewChatVC: MessageCellDelegate {
   }
   
   func didTapAccessoryView(in cell: MessageCollectionViewCell) {
-    print("didTapAccessoryView")
+    print("&******************* didTapAccessoryView")
     guard let idx = self.messagesCollectionView.indexPath(for: cell) else { return }
     guard self.messageLog[idx.section].translated else { return }
     self.messageLog[idx.section].toggleTrans {
@@ -654,12 +632,39 @@ extension NewChatVC: MessageCellDelegate {
   //  }
   
 }
-
+ 
+// UIImagePickerControllerDelegate
 extension NewChatVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
   func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
     print("dismiss")
     picker.dismiss(animated: true, completion: nil)
   }
   
+  
+  func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+    picker.dismiss(animated: true, completion: nil)
+    
+    if let image = info[.editedImage] as? UIImage, let imageData =  image.pngData() {
+      let fileName = "photo_message_" + chatID.replacingOccurrences(of: " ", with: "-") + ".png"
+      print("fileName: ", fileName)
+    
+      StorageManager.shared.uploadMessagePhoto(with: imageData, fileName: fileName) { [weak self] res in
+        switch res {
+        case .success(let urlString):
+          print("urlString: ", urlString)
+          
+          DatabaseManager.shared.sendMessage(text: urlString, chatID: self?.chatID ?? "")
+          
+        case .failure(let err):
+          print("err: ", err)
+        }
+      }
+      
+    }
+    
+    
+    
+    
+  }
   
 }

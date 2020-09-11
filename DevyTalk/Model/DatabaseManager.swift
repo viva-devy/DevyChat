@@ -519,6 +519,77 @@ extension DatabaseManager {
     }
     
   }
+
+  
+    func sendMessage2(text: TestMessage, chatID: String, user: UserData? = nil) {
+      let chatMemberRef = database.child("chat_messages").child(chatID).childByAutoId()
+       
+      guard let childKey = chatMemberRef.key else { return }
+      
+  //    let now = Date().toMessageDate()
+  //    let nowData = (try? JSONEncoder().encode(now)) ?? Data()
+  //    let nowTemp = (try? JSONSerialization.jsonObject(with: nowData, options: .allowFragments)).flatMap { $0 as? [String: Any] }
+  //
+  //    database.child("tempRef").child(childKey).setValue(nowTemp ?? [:])
+      
+      let mDate = Date().toMessageDate()
+      
+      guard let mDateData = try? JSONEncoder().encode(mDate) else {
+        print("fail to convert user to mDateData")
+        return }
+      let mDateTemp = (try? JSONSerialization.jsonObject(with: mDateData, options: .allowFragments)).flatMap { $0 as? [String: Any] }
+      guard let mDateJson = mDateTemp else {
+        print("mDateJson is nil")
+        return }
+      var lastUser = user == nil ? UserMe.shared.user : user!
+      lastUser.chats = nil
+      guard let userData = try? JSONEncoder().encode(lastUser) else {
+        print("fail to convert user to mDateData")
+        return }
+      let userTemp = (try? JSONSerialization.jsonObject(with: userData, options: .allowFragments)).flatMap { $0 as? [String: Any] }
+      guard let userJson = userTemp else {
+        print("mDateJson is nil")
+        return }
+      
+      var message = ""
+       switch text.kind {
+       case .text(let messageText):
+         message = messageText
+       case .attributedText(_):
+         break
+       case .photo(let mediaItem):
+         if let targetUrlString = mediaItem.url?.absoluteString {
+           message = targetUrlString
+         }
+         break
+       case .video(let mediaItem):
+         if let targetUrlString = mediaItem.url?.absoluteString {
+           message = targetUrlString
+         }
+         break
+       default:
+         break
+       }
+      
+      let sendMessage: [String: Any] = [
+        "m_chatid": chatID,
+        "m_messageDate": mDateJson,
+        "m_messageId": childKey,
+        "m_messageType": "TEXT", //수정해줘야함.
+        "m_messageUser": userJson,
+        "m_readUserList": [UserMe.shared.user.docID ?? "Error"],
+        "m_unreadCount": 0, // setLastMessage 에서 수정함.
+        "message": text,
+        "tm_int": 0
+      ]
+      
+      
+      self.setLastMessage(chatID: chatID, lastMessage: sendMessage, userName: lastUser.docNAME ?? "Error") {
+        chatMemberRef.setValue($0)
+      }
+      
+    }
+  
   
   private func setLastMessage(chatID: String, lastMessage: [String: Any], userName: String, completion: @escaping ([String: Any]) -> ()) {
     let members = database.child("chat_members").child(chatID)
@@ -570,18 +641,7 @@ extension DatabaseManager {
     
     let currentUserEmail = DatabaseManager.safeEmail(emailAddress: myEmail)
     
-    // 대화 내용 -
-//    let collectionMessage: [String: Any] = [
-//      "id": firstMessage.messageId,
-//      "type": firstMessage.kind.messageKindString,
-//      "content": message,
-//      "date": dateString,
-//      "sender_email": currentUserEmail,
-//      "is_read": false,
-//      "name": name
-//
-//    ]
-    
+
     if let countryCode = locale.regionCode {
          print("countryCode: " ,countryCode.uppercased())
       countryCode.lowercased()

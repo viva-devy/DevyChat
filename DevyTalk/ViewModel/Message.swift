@@ -17,6 +17,13 @@ struct Message: MessageType {
   
 }
 
+struct TestMessage: MessageType {
+ var sender: SenderType
+ var messageId: String
+ var sentDate: Date
+ var kind: MessageKind 
+}
+
 //extension MessageKind {
 //  var messageKindString: String {
 //    switch self {
