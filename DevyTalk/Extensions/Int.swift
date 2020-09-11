@@ -22,7 +22,9 @@ public extension IntegerLiteralType {
     print("toCurrentTimeZone: ", now.addingTimeInterval(delta))
     return now.addingTimeInterval(delta)
   }
-  
+}
+
+extension Int {
   func fillZero() -> String {
     let str = String(self)
     guard str.count == 1 else { return str }
