@@ -313,6 +313,27 @@ extension DatabaseManager {
     }
   }
   
+  func configureRead(list: [String], chatID: String, mID: String) {
+    guard let myUID = UserMe.shared.user.docID else { return }
+    print("readCheck: ", list, myUID)
+    guard !list.contains(myUID) else { return }
+    let ref = database.child("chat_messages").child(chatID).child(mID)
+    
+    ref.child("m_readUserList").runTransactionBlock { (data) -> TransactionResult in
+      guard var userList = data.value as? [String] else { return .abort() }
+      userList.append(myUID)
+      data.value = userList
+      return .success(withValue: data)
+    }
+    
+    ref.child("m_unreadCount").runTransactionBlock { (data) -> TransactionResult in
+      guard let count = data.value as? Int else { return .abort() }
+      data.value = count < 1 ? 0 : count - 1
+      return .success(withValue: data)
+    }
+    
+  }
+  
   private func addChatList(chatRef: DatabaseReference, completion: @escaping (String) -> ()) {
     chatRef.ref.child("title").observe(.value) { (snap) in
       guard let title = snap.value as? String else { return }

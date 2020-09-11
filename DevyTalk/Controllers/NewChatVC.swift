@@ -82,20 +82,22 @@ class NewChatVC: MessagesViewController {
   }
 
   private func convertToMessageLog(_ origin: [String: Any]) -> BasicMessageModel {
-    let id = origin["m_chatid"] as? String
+    let id = origin["m_chatid"] as? String ?? "chatID"
 //    let delta = (origin["m_messageDate"] as? [String: Any])?["time"] as? Int ?? 0
 //    let offset = (origin["m_messageDate"] as? [String: Any])?["timezoneOffset"] as? Int ?? 0
     let date = origin["m_messageDate"] as? [String: Any] ?? [:]
-    let messageId = origin["m_messageId"] as? String
+    let messageId = origin["m_messageId"] as? String ?? "mID"
     let type = origin["m_messageType"] as? String
     let user = try? UserData(dictionary: (origin["m_messageUser"] as? [String: Any]) ?? [:])
     // [String: Any]타입의 딕셔너리로 Userdata를 생성한다.
-    let list = origin["m_readUserList"] as? [String]
+    let list = origin["m_readUserList"] as? [String] ?? []
     let unread = origin["m_unreadCount"] as? Int
     let message = origin["message"] as? String
     let tm = origin["tm_int"] as? Int
 //    print(message, delta, offset)
-    return TextMessageModel(ID: id ?? "", date: toDate(data: date), messageId: messageId ?? "", type: type ?? "", user: user ?? UserData(), list: list ?? [], unread: unread ?? 0, message: message ?? "", tmInt: tm ?? 0)
+    DatabaseManager.shared.configureRead(list: list, chatID: id, mID: messageId)
+    
+    return TextMessageModel(ID: id, date: toDate(data: date), messageId: messageId, type: type ?? "", user: user ?? UserData(), list: list, unread: unread ?? 0, message: message ?? "", tmInt: tm ?? 0)
   }
   
   func toDate(data: [String: Any]) -> Date {
@@ -535,7 +537,8 @@ extension NewChatVC: MessagesDataSource, MessagesLayoutDelegate, MessagesDisplay
     
     let timeLabel = UILabel()
     let unreadCount = UILabel()
-    unreadCount.text = "1"
+    let count = (message as? BasicMessageModel)?.unreadCount ?? 0
+    unreadCount.text = count < 1 ? "" : "\(count)"
     unreadCount.textColor = .appColor(.aPp)
     unreadCount.font = font
     
