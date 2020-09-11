@@ -13,6 +13,8 @@ import InputBarAccessoryView
 
 class NewChatVC: MessagesViewController {
   
+  var aesKey: String = ""
+  
   var chatID: String = ""
   
   var isSelect: Bool = false

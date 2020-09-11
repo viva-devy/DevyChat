@@ -475,10 +475,10 @@ extension DatabaseManager {
     guard let childKey = chatMemberRef.key else { return }
     
 //    let now = Date().toMessageDate()
-//    let nowData = (try? JSONEncoder().encode(now)) ?? Data()
+//    let nowData = ((try? JSONEncoder().encode(now)) ?? Data()).base64EncodedString()
 //    let nowTemp = (try? JSONSerialization.jsonObject(with: nowData, options: .allowFragments)).flatMap { $0 as? [String: Any] }
 //
-//    database.child("tempRef").child(childKey).setValue(nowTemp ?? [:])
+//    database.child("tempRef").child(childKey).setValue(["data": nowData])
     
     let mDate = Date().toMessageDate()
     
