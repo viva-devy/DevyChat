@@ -16,8 +16,17 @@ class GlobalWaitingCell: UITableViewCell {
     willSet(new) {
       guard let chat = new else { return }
       self.hosNameLabel.text = chat.title
-      self.message = chat.lastMessage?.message ?? "-"
       self.newIV.alpha = chat.cTotalUnreadCount == 0 ? 0 : 1
+      
+      guard let en = chat.lastMessage?.message, let chatID = chat.chatID else {
+        self.message = "-"
+        return }
+      API.shared.getAESKey(with: chatID) {
+        guard let aes = $0, let clear = Secu.rity.decryptionMsg(en, AESKey: aes) else {
+          self.message = "-"
+          return }
+        self.message = clear
+      }
     }
   }
   

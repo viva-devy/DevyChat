@@ -216,7 +216,7 @@ extension DatabaseManager {
   }
   
   // MARK: 3. 채팅방 생성
-  func createChatRoom(otherKey: String, myKey: String, hosKey: String, name: String, completion: @escaping (String) -> Void, titleCompletion: @escaping (String) -> ()) {
+  func createChatRoom(otherKey: String, myKey: String, hosKey: String, name: String, completion: @escaping ((String, String)) -> Void, titleCompletion: @escaping (String) -> ()) {
     var isSentMessage: Bool = false
     let ref = database.child("users").child(myKey).child("chats")
     let mChatRef = ref.childByAutoId()
@@ -260,13 +260,21 @@ extension DatabaseManager {
                 print(err?.localizedDescription)
                 return }
               snap.ref.child("chats").child(mChatID).setValue(chatListJson) { _,_  in
-                completion(mChatID)
+//                completion(mChatID)
               }
               if !isSentMessage {
                 // need to send auto message and change title
-                self.sendMessage(text: "하이요~ㅋㅋ", chatID: mChatID, user: try? UserData(dictionary: dict))
                 self.addChatList(chatRef: mChatRef, completion: titleCompletion)    // titleCompletion - title이 변경되면 보내는것
+                Secu.rity.getAESKey(chatID: mChatID, generate: true) {
+                  guard let aes = $0 else { return }
+                  completion((mChatID, aes))
+                  if let en = Secu.rity.encryptionMsg("하이요~ㅋㅋ", AESKey: aes) {
+                    self.sendMessage(text: en, chatID: mChatID, user: try? UserData(dictionary: dict))
+                  }
+                }
+                
                 isSentMessage = true
+                
               }
               
             }

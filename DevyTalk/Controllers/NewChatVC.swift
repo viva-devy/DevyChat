@@ -95,9 +95,12 @@ class NewChatVC: MessagesViewController {
     let message = origin["message"] as? String
     let tm = origin["tm_int"] as? Int
 //    print(message, delta, offset)
+    
+    let clearMsg = message == nil ? "fail" : Secu.rity.decryptionMsg(message!, AESKey: self.aesKey) ?? "fail"
+    
     DatabaseManager.shared.configureRead(list: list, chatID: id, mID: messageId)
     
-    return TextMessageModel(ID: id, date: toDate(data: date), messageId: messageId, type: type ?? "", user: user ?? UserData(), list: list, unread: unread ?? 0, message: message ?? "", tmInt: tm ?? 0)
+    return TextMessageModel(ID: id, date: toDate(data: date), messageId: messageId, type: type ?? "", user: user ?? UserData(), list: list, unread: unread ?? 0, message: clearMsg, tmInt: tm ?? 0)
   }
   
   func toDate(data: [String: Any]) -> Date {
@@ -108,7 +111,8 @@ class NewChatVC: MessagesViewController {
     let formatter = DateFormatter()
     formatter.timeZone = messageTZ
     formatter.dateFormat = "yyyyMMddHHmmss"
-    let mDateStr = "\(messageDate.year + 1900)" + messageDate.month.fillZero() + messageDate.date.fillZero() + messageDate.hours.fillZero() + messageDate.minutes.fillZero() + messageDate.seconds.fillZero()
+    let month = messageDate.month.fillZero()
+    let mDateStr = "\(messageDate.year + 1900)\(month)\(messageDate.date.fillZero())\(messageDate.hours.fillZero())\(messageDate.minutes.fillZero())\(messageDate.seconds.fillZero())"
     let mDate = formatter.date(from: mDateStr) ?? Date()
     
     return Calendar.current.dateBySetting(timeZone: TimeZone.autoupdatingCurrent, of: mDate) ?? Date()
@@ -417,9 +421,13 @@ extension NewChatVC: InputBarAccessoryViewDelegate {
     attri.addAttribute(.font, value: font, range: NSRange(location: 0, length: inputBar.inputTextView.text.count))
     attri.addAttribute(.foregroundColor, value: UIColor.appColor(.gr2), range: NSRange(location: 0, length: inputBar.inputTextView.text.count))
     
-
+    if let encrypt = Secu.rity.encryptionMsg(text, AESKey: self.aesKey) {
+      DatabaseManager.shared.sendMessage(text: encrypt, chatID: chatID)
+    } else {
+      print("fail to encrypt message!!!")
+    }
     
-    DatabaseManager.shared.sendMessage(text: text, chatID: chatID)
+    
   }
 
   
@@ -654,11 +662,13 @@ extension NewChatVC: UIImagePickerControllerDelegate, UINavigationControllerDele
       print("fileName: ", fileName)
     
       StorageManager.shared.uploadMessagePhoto(with: imageData, fileName: fileName) { [weak self] res in
+        guard let `self` = self else { return }
         switch res {
         case .success(let urlString):
           print("urlString: ", urlString)
-          
-          DatabaseManager.shared.sendMessage(text: urlString, chatID: self?.chatID ?? "")
+          if let en = Secu.rity.encryptionMsg(urlString, AESKey: self.aesKey) {
+            DatabaseManager.shared.sendMessage(text: en, chatID: self.chatID)
+          }
           
         case .failure(let err):
           print("err: ", err)
