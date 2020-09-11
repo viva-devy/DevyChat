@@ -122,14 +122,16 @@ class ChatListVC: UIViewController {
                   return
               }
               DatabaseManager.shared.createChatRoom(otherKey: otherKey, myKey: self.userMe.user.docID ?? "docID", hosKey: self.hosData.0, name: name, completion: { id in
-                DispatchQueue.main.async {
-                  let newChatVC = NewChatVC()
-                  newChatVC.title = self.hosData.1
-                  newChatVC.chatID = id
-                  newChatVC.hosData = self.hosData
-                  
-                  
-                  self.navigationController?.pushViewController(newChatVC, animated: false)
+                Secu.rity.getAESKey(chatID: id, generate: true) {
+                  guard let aes = $0 else { return }
+                  DispatchQueue.main.async {
+                    let newChatVC = NewChatVC()
+                    newChatVC.aesKey = aes
+                    newChatVC.title = self.hosData.1
+                    newChatVC.chatID = id
+                    newChatVC.hosData = self.hosData
+                    self.navigationController?.pushViewController(newChatVC, animated: false)
+                  }
                 }
               }) { (message) in
                 print("message: ", message)
@@ -262,33 +264,73 @@ extension ChatListVC: UITableViewDelegate {
             let name = user["doc_NAME"] as? String else {
               return
           }
-          DatabaseManager.shared.createChatRoom(otherKey: otherKey, myKey: self.userMe.user.docID ?? "docID", hosKey: self.hosData.0, name: name, completion: { (result) in
-            print("result: ", result )
+          DatabaseManager.shared.createChatRoom(otherKey: otherKey, myKey: self.userMe.user.docID ?? "docID", hosKey: self.hosData.0, name: name, completion: { id in
+            Secu.rity.getAESKey(chatID: id, generate: true) {
+              guard let aes = $0 else { return }
+              DispatchQueue.main.async {
+                let newChatVC = NewChatVC()
+                newChatVC.aesKey = aes
+                newChatVC.title = self.hosData.1
+                newChatVC.chatID = id
+                newChatVC.hosData = self.hosData
+                self.navigationController?.pushViewController(newChatVC, animated: false)
+              }
+            }
           }) { (message) in
             print("message: ", message)
           }
-          let newChatVC = NewChatVC()
-          newChatVC.title = self.hosData.1
-          newChatVC.hosData = self.hosData
-          newChatVC.navigationController?.navigationItem.title = nil
-            let backBarBtn = UIBarButtonItem(image: nil, style: .done, target: nil, action: nil)
-          self.navigationItem.backBarButtonItem = backBarBtn
-          self.navigationItem.backBarButtonItem?.tintColor = .white
-          newChatVC.navigationController?.navigationItem.backBarButtonItem?.tintColor = .white
-          self.navigationController?.pushViewController(newChatVC, animated: false)
+          
         case .failure(let err):
           print(err.localizedDescription)
         }
       }
+      
+//      DatabaseManager.shared.findChat(hosKey: self.hosData.0) {
+//        switch $0 {
+//        case .success(let user):    // user -> 원무과유저데이터 or 간호사유저데이터
+//          print("user", user)
+//          guard let otherKey = user["doc_ID"] as? String,
+//            let name = user["doc_NAME"] as? String else {
+//              return
+//          }
+//          DatabaseManager.shared.createChatRoom(otherKey: otherKey, myKey: self.userMe.user.docID ?? "docID", hosKey: self.hosData.0, name: name, completion: { (result) in
+//            print("result: ", result )
+//          }) { (message) in
+//            print("message: ", message)
+//          }
+//          let newChatVC = NewChatVC()
+//          newChatVC.title = self.hosData.1
+//          newChatVC.hosData = self.hosData
+//          newChatVC.navigationController?.navigationItem.title = nil
+//            let backBarBtn = UIBarButtonItem(image: nil, style: .done, target: nil, action: nil)
+//          self.navigationItem.backBarButtonItem = backBarBtn
+//          self.navigationItem.backBarButtonItem?.tintColor = .white
+//          newChatVC.navigationController?.navigationItem.backBarButtonItem?.tintColor = .white
+//          self.navigationController?.pushViewController(newChatVC, animated: false)
+//        case .failure(let err):
+//          print(err.localizedDescription)
+//        }
+//      }
 
     } else {
       // 기존에 채팅한 기록이 있을때 기존방
       let chat = chatList[indexPath.row]
-      let newChatVC = NewChatVC()
-      newChatVC.title = hosData.1
-      newChatVC.chatID = chat.chatID ?? ""
-      newChatVC.hosData = self.hosData
-      navigationController?.pushViewController(newChatVC, animated: false)
+      guard let chatID = chat.chatID else {
+        print("noChatID")
+        return }
+      Secu.rity.getAESKey(chatID: chatID, generate: false) {
+        guard let aes = $0 else { return }
+        DispatchQueue.main.async {
+          let newChatVC = NewChatVC()
+          newChatVC.aesKey = aes
+          newChatVC.title = self.hosData.1
+          newChatVC.chatID = chat.chatID ?? ""
+          newChatVC.hosData = self.hosData
+          self.navigationController?.pushViewController(newChatVC, animated: false)
+        }
+      }
+      
+      
     }
     
     

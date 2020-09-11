@@ -67,6 +67,9 @@
 		31F860912500ECB000196219 /* BasicMessageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31F860902500ECB000196219 /* BasicMessageModel.swift */; };
 		31F860932500EDCC00196219 /* TextMessageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31F860922500EDCC00196219 /* TextMessageModel.swift */; };
 		408962252509D4EA00E38B6B /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 408962242509D4EA00E38B6B /* String.swift */; };
+		4089622A250B561400E38B6B /* CryptLib.m in Sources */ = {isa = PBXBuildFile; fileRef = 40896228250B561400E38B6B /* CryptLib.m */; };
+		4089622C250B568500E38B6B /* Secu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4089622B250B568500E38B6B /* Secu.swift */; };
+		4089622F250B60B300E38B6B /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4089622E250B60B300E38B6B /* API.swift */; };
 		40A4CD36250630E700777734 /* Trans.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40A4CD35250630E700777734 /* Trans.swift */; };
 		40AB19E62504041B004C238A /* FinishNowCC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40AB19E52504041B004C238A /* FinishNowCC.swift */; };
 		40AB19E8250405AA004C238A /* CustomMessagesSizeCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40AB19E7250405AA004C238A /* CustomMessagesSizeCalculator.swift */; };
@@ -137,6 +140,11 @@
 		31F860902500ECB000196219 /* BasicMessageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicMessageModel.swift; sourceTree = "<group>"; };
 		31F860922500EDCC00196219 /* TextMessageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextMessageModel.swift; sourceTree = "<group>"; };
 		408962242509D4EA00E38B6B /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
+		40896227250B561300E38B6B /* DevyTalk-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "DevyTalk-Bridging-Header.h"; sourceTree = "<group>"; };
+		40896228250B561400E38B6B /* CryptLib.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CryptLib.m; sourceTree = "<group>"; };
+		40896229250B561400E38B6B /* CryptLib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CryptLib.h; sourceTree = "<group>"; };
+		4089622B250B568500E38B6B /* Secu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secu.swift; sourceTree = "<group>"; };
+		4089622E250B60B300E38B6B /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
 		40A4CD35250630E700777734 /* Trans.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trans.swift; sourceTree = "<group>"; };
 		40AB19E52504041B004C238A /* FinishNowCC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinishNowCC.swift; sourceTree = "<group>"; };
 		40AB19E7250405AA004C238A /* CustomMessagesSizeCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomMessagesSizeCalculator.swift; sourceTree = "<group>"; };
@@ -180,6 +188,8 @@
 		3152DF5524F4F2FC00FCF86D /* DevyTalk */ = {
 			isa = PBXGroup;
 			children = (
+				4089622D250B60AA00E38B6B /* API */,
+				40896226250B560000E38B6B /* Crypto */,
 				40A4CD34250630DC00777734 /* Translate */,
 				31F8608F2500EC9E00196219 /* MessageModel */,
 				3152DF9124F4F53400FCF86D /* DevyTalk.entitlements */,
@@ -346,6 +356,25 @@
 			path = MessageModel;
 			sourceTree = "<group>";
 		};
+		40896226250B560000E38B6B /* Crypto */ = {
+			isa = PBXGroup;
+			children = (
+				40896229250B561400E38B6B /* CryptLib.h */,
+				40896228250B561400E38B6B /* CryptLib.m */,
+				40896227250B561300E38B6B /* DevyTalk-Bridging-Header.h */,
+				4089622B250B568500E38B6B /* Secu.swift */,
+			);
+			path = Crypto;
+			sourceTree = "<group>";
+		};
+		4089622D250B60AA00E38B6B /* API */ = {
+			isa = PBXGroup;
+			children = (
+				4089622E250B60B300E38B6B /* API.swift */,
+			);
+			path = API;
+			sourceTree = "<group>";
+		};
 		40A4CD34250630DC00777734 /* Translate */ = {
 			isa = PBXGroup;
 			children = (
@@ -406,6 +435,7 @@
 				TargetAttributes = {
 					3152DF5224F4F2FC00FCF86D = {
 						CreatedOnToolsVersion = 11.4;
+						LastSwiftMigration = 1140;
 					};
 				};
 			};
@@ -518,7 +548,10 @@
 				313984D925014F0500465679 /* LastMessage.swift in Sources */,
 				31F8608624FE39FE00196219 /* GlobalWaitingCell.swift in Sources */,
 				3142162B24F558A800E7E0C9 /* DatabaseManager.swift in Sources */,
+				4089622F250B60B300E38B6B /* API.swift in Sources */,
+				4089622A250B561400E38B6B /* CryptLib.m in Sources */,
 				3142162F24F61F6500E7E0C9 /* StorageManager.swift in Sources */,
+				4089622C250B568500E38B6B /* Secu.swift in Sources */,
 				3152DFB124F4F74D00FCF86D /* VideoPlayerViewController.swift in Sources */,
 				52B984EB250A85A500FA7ADD /* Calendar.swift in Sources */,
 				31F8608A24FEA17B00196219 /* AppointmentCell.swift in Sources */,
@@ -701,6 +734,7 @@
 			baseConfigurationReference = 88E94BB678BC680E82024026 /* Pods-DevyTalk.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = DevyTalk/DevyTalk.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2MWM2K52JH;
@@ -711,6 +745,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.DevyTalk;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "DevyTalk/Crypto/DevyTalk-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -721,6 +757,7 @@
 			baseConfigurationReference = F6E7C5C6EAA4D4E6E2A8EF2F /* Pods-DevyTalk.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = DevyTalk/DevyTalk.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2MWM2K52JH;
@@ -731,6 +768,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.DevyTalk;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "DevyTalk/Crypto/DevyTalk-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
