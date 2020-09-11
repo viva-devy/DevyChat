@@ -216,6 +216,8 @@ class NewChatVC: MessagesViewController {
     button.imageEdgeInsets = UIEdgeInsets(top: 0.i, left: 0, bottom: 0.i, right: 5.i)
     button.setSize(CGSize(width: 40.i, height: 40.i), animated: false)
     button.setImage(UIImage(named: "add"), for: .normal)
+    button.clipsToBounds = true
+    button.contentMode = .scaleAspectFill
     button.onTouchUpInside { [weak self] btn in
       btn.isSelected.toggle()
       if btn.isSelected {
@@ -224,7 +226,6 @@ class NewChatVC: MessagesViewController {
         self?.hideMessageInputBarForChat(btn)
       }
     }
-
     
     messageInputBar.setLeftStackViewWidthConstant(to: 25.i, animated: false)
     messageInputBar.setStackViewItems([button], forStack: .left, animated: false)
@@ -233,8 +234,16 @@ class NewChatVC: MessagesViewController {
   
   // add버튼 눌렀을때 action
   @objc private func configureMessageInputBarForChat(_ sender: UIButton) {
-    scrollsToBottomOnKeyboardBeginsEditing = true // default false
+    self.messageInputBar.inputTextView.becomeFirstResponder()
+    scrollsToBottomOnKeyboardBeginsEditing = true
     maintainPositionOnKeyboardFrameChanged = true
+    
+    print("aaaaaaaaa: ",scrollsToBottomOnKeyboardBeginsEditing)
+    print("bbbbbbbbb: ",maintainPositionOnKeyboardFrameChanged)
+    
+    
+    
+    
     messageInputBar.setMiddleContentView(messageInputBar.inputTextView, animated: false)
     
     let bottomItems = [makeButton(named: "album"), makeButton(named: "camera"), makeButton(named: "file"), .flexibleSpace]
@@ -266,20 +275,13 @@ class NewChatVC: MessagesViewController {
         $0.setSize(CGSize(width: 48.i, height: 70.i), animated: false)
         $0.sizeToFit()
     }
-    .onTouchUpInside { _ in
-      print("Item Tapped")
-    }
+    
   }
   
   @objc private func hideMessageInputBarForChat(_ sender: UIButton) {
-    print("hide: ", sender.isSelected)
-    
-//    messageInputBar.setMiddleContentView(messageInputBar.inputTextView, animated: false)
-    //    messageInputBar.setRightStackViewWidthConstant(to: 52, animated: false)
-    //    let bottomItems = [makeButton(named: "album"), makeButton(named: "camera"), makeButton(named: "file"),.flexibleSpace]
-    //    messageInputBar.setStackViewItems(bottomItems, forStack: .bottom, animated: false)
-//    messageInputBar.isHidden = true
-//    self.isSelect = true
+    messageInputBar.setMiddleContentView(messageInputBar.inputTextView, animated: false)
+    messageInputBar.setStackViewItems([], forStack: .bottom, animated: false)
+          
   }
   
   private func presentPhotoInputActionsheet() {
