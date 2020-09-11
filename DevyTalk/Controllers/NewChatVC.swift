@@ -21,6 +21,8 @@ class NewChatVC: MessagesViewController {
   
   var hosData: (String, String) = ("", "")        //(chatUser.hosID ?? "hosID", chatUser.hosNAME ?? "hosName")
   
+  var trashBin: [UInt] = []
+  
   var messageLog: [BasicMessageModel] = [] {      // 메세지 보낸 기록이 있는 화면
     didSet {
       DispatchQueue.main.async {
@@ -51,24 +53,38 @@ class NewChatVC: MessagesViewController {
     view.backgroundColor = .appColor(.lgr1)
     setupNavi()
     checkFirst()
-
+    // 이 방의 유저리스트 옵저빙 해서 의사있으면 mqtt해야함
     guard chatID != "" else {
       print("chatID is empty")
       self.navigationController?.popViewController(animated: true)
       return }
-    getChatLog(chatID: chatID) {
-      self.messageLog = $0.values.map { (origin) -> BasicMessageModel in
-        self.convertToMessageLog(origin)
-      }.sorted(by: { (lef, ref) -> Bool in
-        lef.sentDate < ref.sentDate
-      })
+//    getChatLog(chatID: chatID) {
+//      self.messageLog = $0.values.map { (origin) -> BasicMessageModel in
+//        self.convertToMessageLog(origin)
+//      }.sorted(by: { (lef, ref) -> Bool in
+//        lef.sentDate < ref.sentDate
+//      })
+//    }
+    
+    getChatLogAdded(chatID: chatID) { [weak self] in
+      guard let `self` = self else { return }
+      self.messageLog.append($0)
     }
+    getChatLogChanged(chatID: chatID)
     DatabaseManager.shared.checkReadSign(id: chatID)
     
     self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap(_:))))
     messagesCollectionView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap(_:))))
     
-    
+  }
+  
+  override func viewDidDisappear(_ animated: Bool) {
+    super.viewDidDisappear(animated)
+    DatabaseManager.shared.moveOutObserves(bin: trashBin)
+  }
+  
+  deinit {
+    print("deinit NewChatVC")
   }
   
   override func viewDidLayoutSubviews() {
@@ -121,8 +137,28 @@ class NewChatVC: MessagesViewController {
   
   
   // 보낸기록이 있는지 확인
-  private func getChatLog(chatID: String, completion: @escaping ([String: [String: Any]]) -> ()) {
-    DatabaseManager.shared.getChatLog(id: chatID, completion: completion)
+//  private func getChatLog(chatID: String, completion: @escaping ([String: [String: Any]]) -> ()) {
+//    DatabaseManager.shared.getChatLog(id: chatID, completion: completion)
+//
+//  }
+  
+  private func getChatLogAdded(chatID: String, completion: @escaping (BasicMessageModel) -> ()) {
+    let trash = DatabaseManager.shared.getChatLogAdded(id: chatID) { [weak self] in
+      guard let `self` = self else { return }
+      completion(self.convertToMessageLog($0))
+    }
+    self.trashBin.append(trash)
+  }
+  
+  private func getChatLogChanged(chatID: String) {
+    let trash = DatabaseManager.shared.getChatLogChanged(id: chatID) { [weak self] in
+      guard let `self` = self else { return }
+      let item = self.convertToMessageLog($0)
+      if let idx = self.messageLog.firstIndex(where: { $0.messageId == item.messageId }) {
+        self.messageLog[idx] = item
+      }
+    }
+    self.trashBin.append(trash)
   }
   
   private func checkFirst() {

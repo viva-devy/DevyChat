@@ -309,6 +309,23 @@ extension DatabaseManager {
     }
   }
   
+  func getChatLogAdded(id: String, completion: @escaping ([String: Any]) -> ()) -> UInt {
+    let logRef = database.child("chat_messages").child(id)
+    
+    return logRef.observe(.childAdded) {
+      guard let value = $0.value as? [String: Any] else { return }
+      completion(value)
+    }
+  }
+  
+  func getChatLogChanged(id: String, completion: @escaping ([String: Any]) -> ()) -> UInt {
+    let logRef = database.child("chat_messages").child(id)
+    return logRef.observe(.childChanged) {
+      guard let value = $0.value as? [String: Any] else { return }
+      completion(value)
+    }
+  }
+  
   func checkReadSign(id: String) {
     let members = database.child("chat_members").child(id)
     members.observeSingleEvent(of: .value) {
@@ -318,6 +335,12 @@ extension DatabaseManager {
         let userRef = self.database.child("users").child($0).child("chats").child(id)
         userRef.child("c_totalUnreadCount").setValue(0)
       }
+    }
+  }
+  
+  func moveOutObserves(bin: [UInt]) {
+    bin.forEach {
+      database.removeObserver(withHandle: $0)
     }
   }
   
