@@ -43,8 +43,8 @@ class API {
     guard let data = try? JSONSerialization.data(withJSONObject: param) else { return }
     
     AF.upload(data, to: url, method: .post, headers: jsonHeader).responseJSON {
-      guard let value = $0.value as? [String: [String: String]],
-        let result = value["result"],
+      guard let value = $0.value as? [String: [[String: String]]],
+        let result = value["result"]?.first,
         let key = result["ENCRYPT_KEY"] else {
         completion(nil)
         return }
