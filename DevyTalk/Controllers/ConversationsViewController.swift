@@ -61,13 +61,13 @@ class ConversationsViewController: UIViewController {
       NotificationCenter.default.removeObserver(observer)
     }
     
-    print("starting conversation fetch..")
+    
     
     let safeEmail = DatabaseManager.safeEmail(emailAddress: email)
     DatabaseManager.shared.getAllConversations(for: safeEmail, completion: { [weak self] result in
       switch result {
       case .success(let conversations):
-        print("successfully got conversation models")
+        
         guard !conversations.isEmpty else {
           return
         }
@@ -77,7 +77,7 @@ class ConversationsViewController: UIViewController {
           self?.conversationsView.tableView.reloadData()
         }
         
-      case .failure(let error):
+      case .failure(_):
         ()
 //        print("failed to get convos: \(error)")
       }
@@ -220,7 +220,7 @@ class ConversationsViewController: UIViewController {
           self?.navigationController?.pushViewController(chatListVC, animated: true)
         } else {
           // 실패면 network error
-          print("실패함")
+          
         }
         
        })
@@ -232,7 +232,7 @@ class ConversationsViewController: UIViewController {
     let newVC = NewConversationViewController()
     newVC.completion = { [weak self] result in
       self?.creatNewConversation(result: result)
-      //      print("VC result: \(result)")
+      
     }
     
     let naviVC = UINavigationController(rootViewController: newVC)

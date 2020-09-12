@@ -71,7 +71,7 @@ class ChatViewController: MessagesViewController {
     messageInputBar.inputTextView.becomeFirstResponder()
     
     if let conversationId = conversationId {
-      print("converiD", conversationId)
+      
       listenForMessages(id: conversationId, shouldScrollToBottom: true)
       
     }
@@ -96,7 +96,7 @@ class ChatViewController: MessagesViewController {
                                         preferredStyle: .actionSheet)
     
     actionSheet.addAction(UIAlertAction(title: "Photo", style: .default, handler: { [weak self] _ in
-      print("presentPhotoInputActionsheet here")
+      
       self?.presentPhotoInputActionsheet()
     }))
     actionSheet.addAction(UIAlertAction(title: "Video", style: .default, handler: { [weak self] _ in
@@ -171,13 +171,13 @@ class ChatViewController: MessagesViewController {
   
   
   private func listenForMessages(id: String, shouldScrollToBottom: Bool) {
-    print("listenForMessages id:", id)
+    
     DatabaseManager.shared.getAllMessagesForConversation(with: id, completion: { [weak self] result in
       switch result {
       case .success(let messages):
-        print("성공이라고 success in getting messages: \(messages)")
+        
         guard !messages.isEmpty else {
-          print("messages are empty")
+          
           return
         }
         self?.messages = messages
@@ -189,8 +189,8 @@ class ChatViewController: MessagesViewController {
             self?.messagesCollectionView.scrollToBottom()
           }
         }
-      case .failure(let error):
-        print("failed to get messages: \(error)")
+      case .failure(_):
+        ()
       }
     })
   }
@@ -238,7 +238,7 @@ extension ChatViewController: UIImagePickerControllerDelegate, UINavigationContr
         switch result {
         case .success(let urlString):
           // Ready to send message
-          print("Uploaded Message Photo: \(urlString)")
+          
           
           guard let url = URL(string: urlString),
             let placeholder = UIImage(named: "picADD") else {
@@ -256,18 +256,18 @@ extension ChatViewController: UIImagePickerControllerDelegate, UINavigationContr
                                 kind: .photo(media))
           
           DatabaseManager.shared.sendMessage(to: conversationId, otherUserEmail: strongSelf.otherUserEmail, name: name, newMessage: message, completion: { success in
-            print("sendMessage")
+            
             if success {
-              print("sent photo message")
+              
             }
             else {
-              print("failed to send photo message")
+              
             }
             
           })
         // Ready to send message
-        case .failure(let error):
-          print("message photo upload error: ", error)
+        case .failure(_):
+          ()
         }
       })
     } else if let videoUrl = info[.mediaURL] as? URL {
@@ -283,7 +283,7 @@ extension ChatViewController: UIImagePickerControllerDelegate, UINavigationContr
         switch result {
         case .success(let urlString):
           // Ready to send message
-          print("Uploaded Message Video: \(urlString)")
+          
           
           guard let url = URL(string: urlString),
             let placeholder = UIImage(named: "picADD") else {
@@ -303,16 +303,16 @@ extension ChatViewController: UIImagePickerControllerDelegate, UINavigationContr
           DatabaseManager.shared.sendMessage(to: conversationId, otherUserEmail: strongSelf.otherUserEmail, name: name, newMessage: message, completion: { success in
             
             if success {
-              print("sent photo message")
+              
             }
             else {
-              print("failed to send photo message")
+              
             }
             
           })
           
-        case .failure(let error):
-          print("message photo upload error: \(error)")
+        case .failure(_):
+          ()
         }
       })
     }
@@ -331,7 +331,7 @@ extension ChatViewController: InputBarAccessoryViewDelegate {
         return
     }
     
-    print("sending: ", text)
+    
     
     let message = Message(sender: selfSender,
                           messageId: messageId,
@@ -347,7 +347,7 @@ extension ChatViewController: InputBarAccessoryViewDelegate {
           self?.isNewConversation = false
           self?.listenForMessages(id: newConversationId, shouldScrollToBottom: true)
         } else {
-          print("faield to send")
+          
         }
       })
     } else {
@@ -357,9 +357,9 @@ extension ChatViewController: InputBarAccessoryViewDelegate {
       // append to existing conversation  data
       DatabaseManager.shared.sendMessage(to: conversationId, otherUserEmail: otherUserEmail, name: name, newMessage: message,  completion: { success in
         if success {
-          print("message sent")
+          
         } else {
-          print("failed to sent")
+          
         }
         
       })
@@ -379,7 +379,7 @@ extension ChatViewController: InputBarAccessoryViewDelegate {
     let dateString = ChatViewController.self.dateFormatter.string(from: Date())
     let newIdentifier = "\(otherUserEmail)_\(safeCurrentEmail)_\(dateString)"
     
-    print("careated message id: ", newIdentifier)
+    
     return newIdentifier
     
   }

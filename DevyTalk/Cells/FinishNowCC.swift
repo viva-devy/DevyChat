@@ -152,8 +152,8 @@ class FinishNowCC: MessageContentCell {
   override func configure(with message: MessageType, at indexPath: IndexPath, and messagesCollectionView: MessagesCollectionView) {
     super.configure(with: message, at: indexPath, and: messagesCollectionView)
 //    if let attri = messagesCollectionView.layoutAttributesForItem(at: indexPath) as? MessagesCollectionViewLayoutAttributes {
-//      print("here")
-//      print(attri.avatarPosition.vertical)
+
+
 ////      self.apply(attri)
 //    }
     

@@ -55,7 +55,7 @@ class NewChatVC: MessagesViewController {
     checkFirst()
     // 이 방의 유저리스트 옵저빙 해서 의사있으면 mqtt해야함
     guard chatID != "" else {
-      print("chatID is empty")
+      
       self.navigationController?.popViewController(animated: true)
       return }
 //    getChatLog(chatID: chatID) {
@@ -306,7 +306,7 @@ class NewChatVC: MessagesViewController {
   
   // add버튼 눌렀을때 action
   @objc private func configureMessageInputBarForChat(_ sender: UIButton) {
-    print("add did Tap")
+    
     messageInputBar.inputTextView.resignFirstResponder()
     messageInputBar.setMiddleContentView(messageInputBar.inputTextView, animated: false)
     
@@ -664,7 +664,7 @@ extension NewChatVC: MessageCellDelegate {
   }
   
   func didTapAccessoryView(in cell: MessageCollectionViewCell) {
-    print("&******************* didTapAccessoryView")
+    
     guard let idx = self.messagesCollectionView.indexPath(for: cell) else { return }
     guard self.messageLog[idx.section].translated else { return }
     self.messageLog[idx.section].toggleTrans {
@@ -695,13 +695,13 @@ extension NewChatVC: UIImagePickerControllerDelegate, UINavigationControllerDele
     
     if let image = info[.editedImage] as? UIImage, let imageData =  image.pngData() {
       let fileName = "photo_message_" + chatID.replacingOccurrences(of: " ", with: "-") + ".png"
-      print("fileName: ", fileName)
+      
     
       StorageManager.shared.uploadMessagePhoto(with: imageData, fileName: fileName) { [weak self] res in
         guard let `self` = self else { return }
         switch res {
         case .success(let urlString):
-          print("urlString: ", urlString)
+          
           if let en = Secu.rity.encryptionMsg(urlString, AESKey: self.aesKey) {
             DatabaseManager.shared.sendMessage(text: en, chatID: self.chatID)
           }

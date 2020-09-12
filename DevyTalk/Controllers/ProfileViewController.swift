@@ -40,7 +40,7 @@ class ProfileViewController: UIViewController {
     let fileName = safeEmail + "_profile_picture.png"
     
     let path = "images/"+fileName
-    print("path: ", path)
+    
     
     let headerView: UIView = {
       let view = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 300.i))
@@ -70,9 +70,9 @@ class ProfileViewController: UIViewController {
       switch result {
       case .success(let url):
         self?.downloadImage(imageView: imageView, url: url)
-        print(url)
-      case .failure(let error):
-        print("Failed to get download url: \(error)")
+        
+      case .failure(_):
+        ()
       }
     }
     
@@ -174,7 +174,7 @@ extension ProfileViewController: UITableViewDelegate {
         
       }
       catch {
-        print("Failed to log out")
+        ()
       }
       
       

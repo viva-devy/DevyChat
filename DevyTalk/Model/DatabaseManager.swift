@@ -82,7 +82,6 @@ extension DatabaseManager {
     let ref = database.child("users").child(user.docID ?? "docID")
     ref.observeSingleEvent(of: .value, with: { snapshop in
       if !snapshop.exists() {
-        print("존재 안함")
           let newelement = [
             "call_DATE": user.callDATE,          // 앱에서는 사용안함 default
             "country": user.country,
@@ -104,7 +103,6 @@ extension DatabaseManager {
       
           ref.setValue(newelement, withCompletionBlock: { error, _ in
             guard error == nil else {
-              print(error?.localizedDescription)
               completion(false)
               return
             }
@@ -127,19 +125,16 @@ extension DatabaseManager {
     ref.observe(.childAdded) { snapshot in
       guard snapshot.exists() else {
         // no chats
-        print("nothing add")
         return }
       
       // have chat list
       guard let value = snapshot.value as? [String: Any] else {
-        print("no value add")
         return }
       
       guard let list = try? ChatList(dictionary: value) else {
         completion(.failure(.failedToFetch))
         return
       }
-//      print("run in Added")
       completion(.success(list))
     }
     
@@ -158,19 +153,18 @@ extension DatabaseManager {
       
       guard snapshot.exists() else {
         // no chats
-        print("nothing changed")
         return }
       
       // have chat list
       guard let value = snapshot.value as? [String: Any] else {
-        print("no value changed")
+        
         return }
       
       guard let list = try? ChatList(dictionary: value) else {
         completion(.failure(.failedToFetch))
         return
       }
-      print("run in changed")
+      
       completion(.success(list))
     }
     
@@ -183,10 +177,10 @@ extension DatabaseManager {
     ref.observeSingleEvent(of: .value) { snapshot in
       
       if snapshot.exists() {
-//        print("존재", snapshot.value)
+
         guard let value = snapshot.value as? [String: [String: Any]] else {   // [user: [country: "KR"]]
           // no user
-          print("1")
+          
           completion(.failure(.failedToFetch))
           return
         }
@@ -208,7 +202,7 @@ extension DatabaseManager {
         completion(.failure(.noUser))
 
       } else {
-        print("미존재 2")
+        
         completion(.failure(.failedToFetch))        // 존재하지 않으면 종료
       }
       
@@ -221,7 +215,7 @@ extension DatabaseManager {
     let ref = database.child("users").child(myKey).child("chats")
     let mChatRef = ref.childByAutoId()
     guard let mChatID = mChatRef.key else {
-      print("fail to make random key")
+      
       return }     // mChatId 랜덤 생성
     
     let chatMemberRef = database.child("chat_members").child(mChatID)      // chat_members
@@ -229,7 +223,7 @@ extension DatabaseManager {
     var chatList = ChatList(id: mChatID, hosID: hosKey, name: name)       // name: docName
     
     let userArr: [String] = [otherKey, myKey]   // user안에 간호사랑 원무과를 골랐을때
-    print("UserArr: ", userArr)
+    
     chatList.cTotalUnreadCount = userArr.count - 1
     
     userArr.forEach {
@@ -239,25 +233,25 @@ extension DatabaseManager {
           if let userID = dict["doc_ID"] as? String {
             
 //            guard let userData = try? JSONEncoder().encode(user) else {
-//              print("fail to convert user to jsonData1")
+
 //              return }
 //            let userTemp = (try? JSONSerialization.jsonObject(with: userData, options: .allowFragments)).flatMap { $0 as? [String: Any] }
 //            guard let userJson = userTemp else {
-//              print("UserJson is nil")
+
 //              return }
             
             guard let chatListData = try? JSONEncoder().encode(chatList) else {
-              print("fail to convert user to jsonData2")
+              
               return }
             let chatListTemp = (try? JSONSerialization.jsonObject(with: chatListData, options: .allowFragments)).flatMap { $0 as? [String: Any] }
             guard let chatListJson = chatListTemp else {
-              print("chatListJson is nil")
+              
               return }
             
             dict.removeValue(forKey: "chats")
             chatMemberRef.child(userID).setValue(dict) { (err, dbRef) in
               guard err == nil else {
-                print(err?.localizedDescription)
+                
                 return }
               snap.ref.child("chats").child(mChatID).setValue(chatListJson) { _,_  in
 //                completion(mChatID)
@@ -279,11 +273,11 @@ extension DatabaseManager {
               
             }
           } else {
-            print("fail to make UserData")
+            
           }
           
         } else {
-          print("snap value is nil")
+          
         }
         
       }
@@ -298,11 +292,11 @@ extension DatabaseManager {
     let logRef = database.child("chat_messages").child(id)
     logRef.observe(.value) {
       guard $0.exists() else {    // 존재하는지 확인
-        print("비었음")
+        
         completion([:])
         return }
       guard let value = $0.value as? [String: [String: Any]] else {
-        print("형변환 실패")
+        
         completion([:])
         return }
       completion(value)
@@ -346,7 +340,7 @@ extension DatabaseManager {
   
   func configureRead(list: [String], chatID: String, mID: String) {
     guard let myUID = UserMe.shared.user.docID else { return }
-    print("readCheck: ", list, myUID)
+    
     guard !list.contains(myUID) else { return }
     let ref = database.child("chat_messages").child(chatID).child(mID)
     
@@ -378,7 +372,7 @@ extension DatabaseManager {
     ref.observe(.childRemoved, with: { snapshot in
       
       guard let value = snapshot.value as? [String: Any] else {
-        print("no value change")
+        
         return }
       
     })
@@ -424,7 +418,7 @@ extension DatabaseManager {
     ref.observeSingleEvent(of: .value, with: { [weak self] snapshot in
       guard var userNode = snapshot.value as? [String: Any] else {
         completion(false)
-        print("user not found")
+        
         return
       }
       
@@ -535,20 +529,20 @@ extension DatabaseManager {
     let mDate = Date().toMessageDate()
     
     guard let mDateData = try? JSONEncoder().encode(mDate) else {
-      print("fail to convert user to mDateData")
+      
       return }
     let mDateTemp = (try? JSONSerialization.jsonObject(with: mDateData, options: .allowFragments)).flatMap { $0 as? [String: Any] }
     guard let mDateJson = mDateTemp else {
-      print("mDateJson is nil")
+      
       return }
     var lastUser = user == nil ? UserMe.shared.user : user!
     lastUser.chats = nil
     guard let userData = try? JSONEncoder().encode(lastUser) else {
-      print("fail to convert user to mDateData")
+      
       return }
     let userTemp = (try? JSONSerialization.jsonObject(with: userData, options: .allowFragments)).flatMap { $0 as? [String: Any] }
     guard let userJson = userTemp else {
-      print("mDateJson is nil")
+      
       return }
     
     
@@ -587,20 +581,20 @@ extension DatabaseManager {
       let mDate = Date().toMessageDate()
       
       guard let mDateData = try? JSONEncoder().encode(mDate) else {
-        print("fail to convert user to mDateData")
+        
         return }
       let mDateTemp = (try? JSONSerialization.jsonObject(with: mDateData, options: .allowFragments)).flatMap { $0 as? [String: Any] }
       guard let mDateJson = mDateTemp else {
-        print("mDateJson is nil")
+        
         return }
       var lastUser = user == nil ? UserMe.shared.user : user!
       lastUser.chats = nil
       guard let userData = try? JSONEncoder().encode(lastUser) else {
-        print("fail to convert user to mDateData")
+        
         return }
       let userTemp = (try? JSONSerialization.jsonObject(with: userData, options: .allowFragments)).flatMap { $0 as? [String: Any] }
       guard let userJson = userTemp else {
-        print("mDateJson is nil")
+        
         return }
       
       var message = ""
@@ -695,7 +689,7 @@ extension DatabaseManager {
     
 
     if let countryCode = locale.regionCode {
-         print("countryCode: " ,countryCode.uppercased())
+         
       countryCode.lowercased()
     }
     
@@ -732,7 +726,7 @@ extension DatabaseManager {
       ]
     ]
     
-    print("adding convo: ", conversationID)
+    
     
     database.child("\(conversationID)").setValue(value, withCompletionBlock: { error, _ in
       guard error == nil else {
@@ -771,7 +765,7 @@ extension DatabaseManager {
                             otherUserEmail: otherUserEmail,
                             latestMessage: latestMmessageObject)
       })
-      print("conversations", conversations)
+      
       completion(.success(conversations))
     })
   }
@@ -786,7 +780,7 @@ extension DatabaseManager {
         completion(.failure(DatabaseError.failedToFetch))
         return
       }
-//      print("value: ", value)
+
       let messages: [Message] = value.compactMap({ dictionary in
         guard let name = dictionary["name"] as? String,
           let isRead = dictionary["is_read"] as? Bool,
@@ -795,7 +789,7 @@ extension DatabaseManager {
           let senderEmail = dictionary["sender_email"] as? String,
           let type = dictionary["type"] as? String,
           let dateString = dictionary["date"] as? String else {
-            print("return nil")
+            
             return nil
         }
         
@@ -1018,7 +1012,7 @@ extension DatabaseManager {
     
     
     let safeEmail = DatabaseManager.safeEmail(emailAddress: email)
-      print("Deleting conversation with id: ", conversationId)
+      
     
     // Get all conversation for current user.    현재 사용자의 모든 대화 가져 오기
     // delete conversation in collection with target id.   대상 ID가있는 컬렉션에서 대화 삭제
@@ -1031,7 +1025,7 @@ extension DatabaseManager {
         for conversation in conversations {
           if let id = conversation["id"] as? String,
             id == conversationId {
-            print("found conversation to delete")
+            
             break
           }
           
@@ -1041,10 +1035,10 @@ extension DatabaseManager {
         ref.setValue(conversations, withCompletionBlock: { error, _ in
           guard error == nil else {
             completion(false)
-            print("failed to write new conversation array")
+            
             return
           }
-          print("deleted conversation")
+          
           completion(true)
           
         })
