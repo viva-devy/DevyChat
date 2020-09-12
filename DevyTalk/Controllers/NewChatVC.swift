@@ -13,6 +13,8 @@ import InputBarAccessoryView
 
 class NewChatVC: MessagesViewController {
   
+  var totalMsgCount: Int = 0
+  
   var aesKey: String = ""
   
   var chatID: String = ""
@@ -25,15 +27,16 @@ class NewChatVC: MessagesViewController {
   
   var messageLog: [BasicMessageModel] = [] {      // 메세지 보낸 기록이 있는 화면
     didSet {
+      guard messageLog.count >= totalMsgCount else { return }
       DispatchQueue.main.async {
-        self.messagesCollectionView.reloadData()
-        self.messagesCollectionView.scrollToBottom()
+        let visibleIdx = self.messagesCollectionView.indexPathsForVisibleItems.map{$0.section}
+        if visibleIdx.contains(self.messageLog.count - 2) {
+          self.messagesCollectionView.reloadData()
+          self.messagesCollectionView.scrollToBottom()
+        } else {
+          self.messagesCollectionView.reloadDataAndKeepOffset()
+        }
         self.configureMessageInputBar()
-//        self.messageInputBar.inputTextView.becomeFirstResponder()
-       
-//        self.setupInputButton()
-//        self.messagesCollectionView.reloadDataAndKeepOffset()
-        
       }
     }
   }
@@ -143,11 +146,14 @@ class NewChatVC: MessagesViewController {
 //  }
   
   private func getChatLogAdded(chatID: String, completion: @escaping (BasicMessageModel) -> ()) {
-    let trash = DatabaseManager.shared.getChatLogAdded(id: chatID) { [weak self] in
-      guard let `self` = self else { return }
-      completion(self.convertToMessageLog($0))
+    DatabaseManager.shared.getChatLogCount(id: chatID) {
+      self.totalMsgCount = $0
+      let trash = DatabaseManager.shared.getChatLogAdded(id: chatID) { [weak self] in
+        guard let `self` = self else { return }
+        completion(self.convertToMessageLog($0))
+      }
+      self.trashBin.append(trash)
     }
-    self.trashBin.append(trash)
   }
   
   private func getChatLogChanged(chatID: String) {
@@ -247,6 +253,17 @@ class NewChatVC: MessagesViewController {
     messageInputBar.setStackViewItems(bottomItems, forStack: .bottom, animated: false)
     
   }
+  
+  func isTimeLabelVisible(at indexPath: IndexPath) -> Bool {
+    guard messageLog.indices.contains(indexPath.section - 1) else { return false }
+    return messageLog[indexPath.section].sentDate.getDay() != messageLog[indexPath.section - 1].sentDate.getDay()
+//    return indexPath.section % 3 == 0 && !isPreviousMessageSameSender(at: indexPath)
+  }
+  
+//  func isPreviousMessageSameSender(at indexPath: IndexPath) -> Bool {
+//    guard indexPath.section - 1 >= 0 else { return false }
+//    return messageLog[indexPath.section].sender.senderId == messageLog[indexPath.section - 1].sender.senderId
+//  }
   
   
   private func configureInputBarPadding() {
@@ -492,6 +509,25 @@ extension NewChatVC: MessagesDataSource, MessagesLayoutDelegate, MessagesDisplay
   
   func numberOfSections(in messagesCollectionView: MessagesCollectionView) -> Int {
     return messageLog.count
+  }
+  
+  func cellTopLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
+    if isTimeLabelVisible(at: indexPath) {
+      let date = message.sentDate.getDateStr()
+      return NSAttributedString(string: date, attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 11.i), NSAttributedString.Key.foregroundColor: UIColor.appColor(.gr2), NSAttributedString.Key.baselineOffset: 8.i])
+    }
+    return nil
+  }
+  
+  func cellTopLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
+    if isTimeLabelVisible(at: indexPath) {
+      return 17.i + 20.i
+    }
+    return 0
+  }
+  
+  func cellTopLabelAlignment(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> LabelAlignment {
+    return LabelAlignment(textAlignment: .center, textInsets: UIEdgeInsets(top: 0, left: 0, bottom: 20.i, right: 0))
   }
   
   func messageTopLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
