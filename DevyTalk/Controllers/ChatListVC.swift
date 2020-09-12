@@ -59,10 +59,10 @@ class ChatListVC: UIViewController {
     
     checkListView.tableView.dataSource = self
     checkListView.tableView.delegate = self
-    //    print("test", userMe.user)
+    
     
     seeView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTapSeeView)))
-    print("view did load")
+    
     
     // childAdded
     DatabaseManager.shared.checkChatList(uid) { [weak self] result in
@@ -79,8 +79,8 @@ class ChatListVC: UIViewController {
           }) ?? []
         //        self?.chatList.insert(value, at: 0)
         // 채팅방에 갯수는 몇갠지 몰르는데 총 갯수를 가져온다
-        case .failure(let err):
-          dump(err)
+        case .failure(_):
+          ()
       }
     }
     
@@ -116,7 +116,7 @@ class ChatListVC: UIViewController {
     DatabaseManager.shared.findChat(hosKey: self.hosData.0) {
       switch $0 {
         case .success(let user):    // user -> 원무과유저데이터 or 간호사유저데이터
-          print("user", user)
+          
           guard let otherKey = user["doc_ID"] as? String,
             let name = user["doc_NAME"] as? String else {
               return
@@ -131,11 +131,11 @@ class ChatListVC: UIViewController {
               self.navigationController?.pushViewController(newChatVC, animated: false)
             }
           }) { (message) in
-            print("message: ", message)
+            
         }
         
-        case .failure(let err):
-          print(err.localizedDescription)
+        case .failure(_):
+          ()
       }
     }
   }
@@ -256,7 +256,7 @@ extension ChatListVC: UITableViewDelegate {
       DatabaseManager.shared.findChat(hosKey: self.hosData.0) {
         switch $0 {
           case .success(let user):    // user -> 원무과유저데이터 or 간호사유저데이터
-            print("user", user)
+            
             guard let otherKey = user["doc_ID"] as? String,
               let name = user["doc_NAME"] as? String else {
                 return
@@ -271,11 +271,11 @@ extension ChatListVC: UITableViewDelegate {
                 self.navigationController?.pushViewController(newChatVC, animated: false)
               }
             }) { (message) in
-              print("message: ", message)
+              
           }
           
-          case .failure(let err):
-            print(err.localizedDescription)
+          case .failure(_):
+            ()
         }
       }
       

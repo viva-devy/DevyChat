@@ -35,9 +35,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     // Override point for customization after application launch.
     FirebaseApp.configure()
     
-    ["20200906".toDate(), "20200907".toDate(), "20200908".toDate(), "20200909".toDate(), "20200910".toDate(), "20200911".toDate(), "20200912".toDate(), "20200913".toDate()].forEach {
-      print($0)
-    }
+//    ["20200906".toDate(), "20200907".toDate(), "20200908".toDate(), "20200909".toDate(), "20200910".toDate(), "20200911".toDate(), "20200912".toDate(), "20200913".toDate()].forEach {
+//      print($0)
+//    }
     
     // fb
     ApplicationDelegate.shared.application( application, didFinishLaunchingWithOptions: launchOptions )
@@ -66,7 +66,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
   func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
     guard error == nil else {
       if let error = error {
-        print("Failed to sign In with Google: \(error)")
+        
       }
       return
     }
@@ -75,7 +75,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
       return
     }
     
-    print("Did sign in with Google: \(user)")
+    
     
     guard let email = user.profile.email,
       let firstName = user.profile.givenName,
@@ -111,9 +111,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
 //                  switch result {
 //                  case .success(let downloadUrl):
 //                    UserDefaults.standard.set(downloadUrl, forKey: "profile_picture_url")
-//                    print(downloadUrl)
+
 //                  case .failure(let error):
-//                    print("Storage maanger error: \(error)")
+
 //                  }
 //                })
 //              }).resume()
@@ -131,7 +131,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     }
     
     guard let authentication = user.authentication else {
-      print("Missing auth object off of google user")
+    
       return
     }
     
@@ -140,11 +140,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     
     FirebaseAuth.Auth.auth().signIn(with: credential) { (authResult, error) in
       guard authResult != nil, error == nil else {
-        print("failed to log in with google credential")
+        
         return
       }
       
-      print("Successfully signed in with Google cred.")
+      
       NotificationCenter.default.post(name: .didLogInNotification, object: nil)
       
     }
@@ -152,7 +152,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
   }
   
   func sign(_ signIn: GIDSignIn!, didDisconnectWith user: GIDGoogleUser!, withError error: Error!) {
-    print("Google user was disconnected")
+    
     
   }
   

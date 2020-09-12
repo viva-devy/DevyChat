@@ -103,10 +103,10 @@ extension NewConversationViewController: UISearchBarDelegate {
         case .success(let usersCollection):
           self?.hasFetched = true
           self?.users = usersCollection
-          print("usersCollection: ", usersCollection)
+          
           self?.filterUsers(with: query)
-        case .failure(let error):
-          print("Failed to get users:", error)
+        case .failure(_):
+          ()
         }
       })
       
@@ -118,7 +118,7 @@ extension NewConversationViewController: UISearchBarDelegate {
   func filterUsers(with term: String) {
     // update the UI: show results or show no results label
     guard let currentUserEmail = UserDefaults.standard.value(forKey: "email") as? String, hasFetched else {
-      print("currentUserEmail: ", UserDefaults.standard.value(forKey: "email") as? String)
+      
       return
     }
     
@@ -137,7 +137,7 @@ extension NewConversationViewController: UISearchBarDelegate {
         guard let email = $0["email"], let name = $0["name"] else {
             return nil
         }
-        print("name: name, email: email", name, email)
+        
         return SearchResult(name: name, email: email)
       })
     

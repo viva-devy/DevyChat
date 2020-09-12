@@ -39,7 +39,7 @@ open class CustomMessageSizeCalculator: MessageSizeCalculator {
             let maxWidth = 247.i
 //            print("maxWidth: ", maxWidth)
             let tempSize = labelSize(for: item.1, considering: maxWidth - 10.i - 10.i)
-            print("tempSize: ", tempSize)
+            
             return CGSize(width: maxWidth, height: tempSize.height + 20.i + 35.i + 10.i + 10.i)
 //            return CGSize(width: maxWidth, height: 168.i)
           default:

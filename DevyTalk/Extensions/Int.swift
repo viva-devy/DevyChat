@@ -19,7 +19,7 @@ public extension IntegerLiteralType {
     let now = Date(timeIntervalSince1970: TimeInterval(time))
     let myTZ = TimeZone.autoupdatingCurrent
     let delta = TimeInterval(myTZ.secondsFromGMT(for: now) - targetTZ.secondsFromGMT(for: now))
-    print("toCurrentTimeZone: ", now.addingTimeInterval(delta))
+    
     return now.addingTimeInterval(delta)
   }
 }

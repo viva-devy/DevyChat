@@ -110,7 +110,7 @@ class CustomInputBar: InputBarAccessoryView {
   }
   
   @objc func didTapSendBtn(_ sender: UIButton) {
-    print("didTapSendBtn")
+    
     sender.isSelected ? showInputBox(show: true) : showInputBox(show: false)
   }
   
