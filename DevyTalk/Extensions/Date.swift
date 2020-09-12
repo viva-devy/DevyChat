@@ -27,6 +27,20 @@ extension Date {
     return formatter.date(from: date) ?? Date()
   }
   
+  func getDay() -> String {
+    let formatter = DateFormatter()
+    formatter.locale = Locale.autoupdatingCurrent
+    formatter.dateFormat = "dd"
+    return formatter.string(from: self)
+  }
+  
+  func getDateStr() -> String {
+    let formatter = DateFormatter()
+    formatter.locale = Locale.autoupdatingCurrent
+    formatter.dateFormat = "⎯⎯⎯⎯⎯⎯⎯⎯  dd / MM / yyyy  ⎯⎯⎯⎯⎯⎯⎯⎯" 
+    return formatter.string(from: self)
+  }
+  
   func toMessageDate() -> MessageDate {
     let formatter = DateFormatter()
     formatter.locale = Locale.autoupdatingCurrent

@@ -303,9 +303,16 @@ extension DatabaseManager {
     }
   }
   
-  func getChatLogAdded(id: String, completion: @escaping ([String: Any]) -> ()) -> UInt {
+  func getChatLogCount(id: String, completion: @escaping (Int) -> ()) {
     let logRef = database.child("chat_messages").child(id)
     
+    logRef.observeSingleEvent(of: .value) {
+      completion(Int($0.childrenCount))
+    }
+  }
+  
+  func getChatLogAdded(id: String, completion: @escaping ([String: Any]) -> ()) -> UInt {
+    let logRef = database.child("chat_messages").child(id)
     return logRef.observe(.childAdded) {
       guard let value = $0.value as? [String: Any] else { return }
       completion(value)
