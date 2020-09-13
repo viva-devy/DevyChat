@@ -22,6 +22,11 @@ class NewChatVC: MessagesViewController {
   var hosData: (String, String) = ("", "")        //(chatUser.hosID ?? "hosID", chatUser.hosNAME ?? "hosName")
   
   var trashBin: [UInt] = []
+  public typealias EventCallback = (KeyboardNotification)->Void
+  private var callbacks: [KeyboardEvent: EventCallback] = [:]
+  private(set) public var isKeyboardHidden: Bool = true
+  private var cachedNotification: KeyboardNotification?
+  
   
   var messageLog: [BasicMessageModel] = [] {      // 메세지 보낸 기록이 있는 화면
     didSet {
@@ -31,7 +36,7 @@ class NewChatVC: MessagesViewController {
         self.configureMessageInputBar()
 //        self.messageInputBar.inputTextView.becomeFirstResponder()
        
-//        self.setupInputButton()
+        self.setupInputButton()
 //        self.messagesCollectionView.reloadDataAndKeepOffset()
         
       }
@@ -76,6 +81,27 @@ class NewChatVC: MessagesViewController {
     self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap(_:))))
     messagesCollectionView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap(_:))))
     
+    
+    
+//    NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+//
+//
+//    NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+//
+//    NotificationCenter.default.addObserver(self,
+//                                           selector: #selector(keyboardWillChangeFrame(notification:)),
+//                                           name: UIResponder.keyboardWillChangeFrameNotification,
+//                                           object: nil)
+    
+    
+    NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+    NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+    NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(_:)), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+    
+    
+    print("inputTextViewFrame: ", messageInputBar.inputTextView.frame)
+    
+    
   }
   
   override func viewDidDisappear(_ animated: Bool) {
@@ -92,8 +118,8 @@ class NewChatVC: MessagesViewController {
     
     scrollsToBottomOnKeyboardBeginsEditing = true
     maintainPositionOnKeyboardFrameChanged = true
-    
-    
+
+
     
   }
 
@@ -228,7 +254,7 @@ class NewChatVC: MessagesViewController {
   
   
   private func configureInputBarItems() {
-    setupInputButton()
+//    setupInputButton()
     messageInputBar.setRightStackViewWidthConstant(to: 38.i, animated: false)
     messageInputBar.sendButton.contentEdgeInsets = UIEdgeInsets(top: 0.i, left: 0.i, bottom: 0.i, right: 0.i)
     messageInputBar.sendButton.setSize(CGSize(width: 36.i, height: 36.i), animated: false)
@@ -264,6 +290,7 @@ class NewChatVC: MessagesViewController {
     messageInputBar.sendButton.contentMode = .scaleAspectFill
     
   }
+  var isCount = false
   
   private func setupInputButton() {
     messageInputBar.leftStackView.isUserInteractionEnabled = true
@@ -274,40 +301,77 @@ class NewChatVC: MessagesViewController {
     button.setImage(UIImage(named: "xbtn"), for: .selected)
     button.clipsToBounds = true
     button.contentMode = .scaleAspectFill
-    
+
     button.onTouchUpInside { [weak self] btn in
       btn.isSelected.toggle()
       if btn.isSelected {
         self?.scrollsToBottomOnKeyboardBeginsEditing = true
         self?.maintainPositionOnKeyboardFrameChanged = true
-        
+
         self?.configureMessageInputBarForChat(btn)
-        self?.messageInputBar.inputTextView.becomeFirstResponder()
-        btn.onSelected { [weak self] (b) in
-          self?.messageInputBar.inputTextView.resignFirstResponder()
-        }
+//        self?.messageInputBar.inputTextView.becomeFirstResponder()
+        print("버튼 클릭했음 true")
+//        btn.onSelected { [weak self] (b) in
+//          self?.messageInputBar.inputTextView.resignFirstResponder()
+//          print("onSelected안에 true")
+//        }
+    
+
       } else {
         self?.scrollsToBottomOnKeyboardBeginsEditing = true
         self?.maintainPositionOnKeyboardFrameChanged = true
         self?.hideMessageInputBarForChat(btn)
-        self?.messageInputBar.inputTextView.becomeFirstResponder()
-        btn.onSelected { [weak self] (b) in
-          self?.messageInputBar.inputTextView.resignFirstResponder()
-        }
+//        self?.messageInputBar.inputTextView.becomeFirstResponder()
+        print("버튼 클릭했음 false")
+//        btn.onSelected { [weak self] (b) in
+//          self?.messageInputBar.inputTextView.resignFirstResponder()
+//          print("onSelected안에 false")
+//        }
+
+
       }
 
     }
-    
+
     
     messageInputBar.setLeftStackViewWidthConstant(to: 25.i, animated: false)
     messageInputBar.setStackViewItems([button], forStack: .left, animated: false)
     
   }
+  public var items: [InputItem] {
+    return [messageInputBar.leftStackViewItems, messageInputBar.rightStackViewItems, messageInputBar.bottomStackViewItems, messageInputBar.topStackViewItems, messageInputBar.nonStackViewItems].flatMap { $0 }
+  }
+  
+  @objc func keyboardWillShow(notification: NSNotification) {
+    isKeyboardHidden = false
+    guard let keyboardNotification = KeyboardNotification(from: notification) else { return }
+    callbacks[.willShow]?(keyboardNotification)
+    
+  }
+  
+  @objc func keyboardWillHide(notification: NSNotification) {
+    guard let keyboardNotification = KeyboardNotification(from: notification) else { return }
+    callbacks[.willHide]?(keyboardNotification)
+    
+  }
+  
+  
+  @objc func keyboardWillChangeFrame(notification: NSNotification) {
+      guard let keyboardNotification = KeyboardNotification(from: notification) else { return }
+      callbacks[.willChangeFrame]?(keyboardNotification)
+      cachedNotification = keyboardNotification
+
+  }
+  @objc open func inputTextViewDidBeginEditing() {
+    items.forEach { $0.keyboardEditingBeginsAction() }
+//    messageInputBar.inputTextView.becomeFirstResponder()
+  }
+
   
   // add버튼 눌렀을때 action
   @objc private func configureMessageInputBarForChat(_ sender: UIButton) {
     
-    messageInputBar.inputTextView.resignFirstResponder()
+    
     messageInputBar.setMiddleContentView(messageInputBar.inputTextView, animated: false)
     
     let bottomItems = [makeButton(named: "album"), makeButton(named: "camera"), makeButton(named: "file"), .flexibleSpace]
@@ -465,6 +529,7 @@ extension NewChatVC: InputBarAccessoryViewDelegate {
     
     
   }
+  
 
   
 }
@@ -718,4 +783,78 @@ extension NewChatVC: UIImagePickerControllerDelegate, UINavigationControllerDele
     
   }
   
+}
+
+extension NewChatVC {
+    @objc func keyboardWillChange(_ sender: Notification) {
+      if let keyboardFrame: NSValue = sender.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+        let keyboardRect = keyboardFrame.cgRectValue
+        let keyboardHeight = keyboardRect.height
+        let duration = sender.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as! Double
+        print("keyboardWillChange ㅇㅅㅇ")
+//        messageInputBar.inputTextView.resignFirstResponder()
+
+      
+        
+      }
+      
+    }
+    
+    @objc func keyboardWillShow(_ sender: Notification) {
+      if let keyboardFrame: NSValue = sender.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+        let keyboardRect = keyboardFrame.cgRectValue
+        let keyboardHeight = keyboardRect.height
+        let duration = sender.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as! Double
+        
+        print("keyboardWillShow")
+        print("basic: ", keyboardHeight)    // +일때 키보드 높이 기본
+        print("inputBar height: ", messageInputBar.inputTextView.frame.height)
+        print("minus: ", keyboardHeight - messageInputBar.inputTextView.frame.height)
+        let minus = keyboardHeight - messageInputBar.inputTextView.frame.height
+        
+        
+        if minus == 289.0 {
+          print("기본 카메라있는 인풋바")
+          messageInputBar.inputTextView.becomeFirstResponder()
+        } else if minus  == 230.0 {
+          print("기본 플럿" )
+          // plus누르면
+          messageInputBar.inputTextView.becomeFirstResponder()
+        } else {
+          messageInputBar.inputTextView.resignFirstResponder()
+        }
+        
+//        messageInputBar.inputTextView.snp.remakeConstraints {
+//           $0.leading.trailing.equalToSuperview()
+//           $0.bottom.equalToSuperview().offset(-keyboardHeight)
+//           $0.height.equalTo(54.i)
+//         }
+        
+        UIView.animate(withDuration: duration) { [weak self] in
+          guard let `self` = self else { return }
+          self.view.layoutIfNeeded()
+        }
+        
+      }
+      
+    }
+    
+    @objc func keyboardWillHide(_ sender: Notification) {
+      if let _: NSValue = sender.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+        let duration = sender.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as! Double
+        print("keyboardWillHide")
+
+//        messageInputBar.inputTextView.snp.remakeConstraints {
+//          $0.bottom.leading.trailing.equalToSuperview()
+//          $0.height.equalTo(54.i)
+//         }
+        
+        UIView.animate(withDuration: duration) { [weak self] in
+          guard let `self` = self else { return }
+          self.view.layoutIfNeeded()
+        }
+        
+      }
+      
+    }
 }
