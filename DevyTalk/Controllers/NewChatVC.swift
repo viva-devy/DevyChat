@@ -13,31 +13,31 @@ import InputBarAccessoryView
 
 class NewChatVC: MessagesViewController {
   
+  var totalMsgCount: Int = 0
+  
   var aesKey: String = ""
   
   var chatID: String = ""
   
-  var isSelect: Bool = false
+  var keyboardY: CGFloat = UIScreen.main.bounds.height
   
-  var hosData: (String, String) = ("", "")        //(chatUser.hosID ?? "hosID", chatUser.hosNAME ?? "hosName")
+  var hosData: (String, String) = ("", "")   //(chatUser.hosID ?? "hosID", chatUser.hosNAME ?? "hosName")
   
   var trashBin: [UInt] = []
-  public typealias EventCallback = (KeyboardNotification)->Void
-  private var callbacks: [KeyboardEvent: EventCallback] = [:]
-  private(set) public var isKeyboardHidden: Bool = true
-  private var cachedNotification: KeyboardNotification?
-  
   
   var messageLog: [BasicMessageModel] = [] {      // 메세지 보낸 기록이 있는 화면
     didSet {
+      guard messageLog.count >= totalMsgCount else { return }
       DispatchQueue.main.async {
-        self.messagesCollectionView.reloadData()
-        self.messagesCollectionView.scrollToBottom()
+        let visibleIdx = self.messagesCollectionView.indexPathsForVisibleItems.map{$0.section}
+        if visibleIdx.contains(self.messageLog.count - 2) {
+          self.messagesCollectionView.reloadData()
+          self.messagesCollectionView.scrollToBottom()
+        } else {
+          self.messagesCollectionView.reloadDataAndKeepOffset()
+        }
         self.configureMessageInputBar()
-//        self.messageInputBar.inputTextView.becomeFirstResponder()
-       
-        self.setupInputButton()
-//        self.messagesCollectionView.reloadDataAndKeepOffset()
+
         
       }
     }
@@ -51,25 +51,86 @@ class NewChatVC: MessagesViewController {
     return Sender(senderId: id, displayName: "Me")
   }
   
-
+  // tipView
+  let tipContainerView: UIView = {
+    let view = UIView()
+    view.backgroundColor = .appColor(.whiteTwo)
+    view.layer.cornerRadius = 12.i
+    view.layer.shadowOpacity = 1
+    view.layer.shadowColor = UIColor.appColor(.lgr4).cgColor
+    view.layer.shadowRadius = 3
+    view.layer.shadowOffset = CGSize(width: 0, height: 0)
+    return view
+  }()
+  
+  let roundView: UIView = {
+    let view = UIView()
+    view.clipsToBounds = true
+    view.layer.cornerRadius = 19.i
+    view.backgroundColor = .clear
+    return view
+  }()
+  
+  let tipLabel: UILabel = {
+    let label = UILabel()
+    label.text = "Tip"
+    label.textAlignment = .center
+    label.font = UIFont(name: "JalnanOTF", size: 13.i)
+    label.textColor = .appColor(.whiteTwo)
+    return label
+  }()
+  
+  let explainLabel: UILabel = {
+    let label = UILabel()
+    label.text = "Click on the speech bubble to translate the msg You can change the language by the upper right icon"
+    label.font = UIFont.systemFont(ofSize: 10.i)
+    label.textColor = .appColor(.dgr1)
+    label.numberOfLines = 2
+    label.lineBreakMode = .byCharWrapping
+    
+    let attriString = NSMutableAttributedString(string: label.text ?? "")
+    let paragraphStyle = NSMutableParagraphStyle()
+    paragraphStyle.lineSpacing = 6.i
+    attriString.addAttribute(NSAttributedString.Key.paragraphStyle, value: paragraphStyle, range: NSMakeRange(0, attriString.length))
+    label.attributedText = attriString
+    return label
+  }()
+  
+  let cancelBtn: UIButton = {
+    let btn = UIButton()
+    btn.setImage(UIImage(named: "xMini"), for: .normal)
+    btn.setImage(UIImage(named: "xMini"), for: .selected)
+    btn.tintColor = .appColor(.lgr3)
+    btn.contentMode = .scaleAspectFill
+    return btn
+  }()
+  
+  var tempCheck: Bool = false {
+    willSet(new) {
+      print("new state: ", new)
+    }
+  }
   
   override func viewDidLoad() {
     super.viewDidLoad()
     view.backgroundColor = .appColor(.lgr1)
+    addSubViews()
+    setupSNP()
     setupNavi()
     checkFirst()
     // 이 방의 유저리스트 옵저빙 해서 의사있으면 mqtt해야함
     guard chatID != "" else {
-      
       self.navigationController?.popViewController(animated: true)
-      return }
-//    getChatLog(chatID: chatID) {
-//      self.messageLog = $0.values.map { (origin) -> BasicMessageModel in
-//        self.convertToMessageLog(origin)
-//      }.sorted(by: { (lef, ref) -> Bool in
-//        lef.sentDate < ref.sentDate
-//      })
-//    }
+      return
+    }
+    
+    //    getChatLog(chatID: chatID) {
+    //      self.messageLog = $0.values.map { (origin) -> BasicMessageModel in
+    //        self.convertToMessageLog(origin)
+    //      }.sorted(by: { (lef, ref) -> Bool in
+    //        lef.sentDate < ref.sentDate
+    //      })
+    //    }
     
     getChatLogAdded(chatID: chatID) { [weak self] in
       guard let `self` = self else { return }
@@ -82,25 +143,14 @@ class NewChatVC: MessagesViewController {
     messagesCollectionView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap(_:))))
     
     
-    
-//    NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
-//
-//
-//    NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
-//
-//    NotificationCenter.default.addObserver(self,
-//                                           selector: #selector(keyboardWillChangeFrame(notification:)),
-//                                           name: UIResponder.keyboardWillChangeFrameNotification,
-//                                           object: nil)
-    
-    
     NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
     NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
     NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(_:)), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
     
+    setGradientBackground(colorTop: .appColor(.amt), colorBottom: .appColor(.aBl2, alpha: 0.8), view: self.roundView)
     
-    print("inputTextViewFrame: ", messageInputBar.inputTextView.frame)
-    
+
+    cancelBtn.addTarget(self, action: #selector(didTapCancelBtn(_:)), for: .touchUpInside)
     
   }
   
@@ -113,20 +163,53 @@ class NewChatVC: MessagesViewController {
     print("deinit NewChatVC")
   }
   
-  override func viewDidLayoutSubviews() {
-    super.viewDidLayoutSubviews()
-    
-    scrollsToBottomOnKeyboardBeginsEditing = true
-    maintainPositionOnKeyboardFrameChanged = true
-
-
+  @objc private func didTapCancelBtn(_ sender: UIButton) {
     
   }
-
+  
+  private func addSubViews() {
+    [tipContainerView]
+      .forEach { view.addSubview($0) }
+    [roundView, explainLabel, cancelBtn]
+      .forEach { tipContainerView.addSubview($0) }
+    roundView.addSubview(tipLabel)
+  }
+  
+  private func setupSNP() {
+    tipContainerView.snp.makeConstraints {
+      $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(10.i)
+      $0.leading.trailing.equalToSuperview().inset(10.i)
+    }
+    
+    roundView.snp.makeConstraints {
+      $0.centerY.equalToSuperview()
+      $0.leading.equalToSuperview().offset(18.i)
+      $0.width.height.equalTo(38.i)
+    }
+    
+    tipLabel.snp.makeConstraints {
+      $0.center.equalToSuperview()
+    }
+    
+    explainLabel.snp.makeConstraints {
+      $0.top.equalToSuperview().offset(18.i)
+      $0.leading.equalTo(roundView.snp.trailing).offset(10.i)
+      $0.trailing.equalToSuperview().offset(-47.i)
+      $0.bottom.equalToSuperview().offset(-17.i)
+    }
+    
+    cancelBtn.snp.makeConstraints {
+      $0.top.trailing.equalToSuperview().inset(12.i)
+      $0.width.height.equalTo(11.i)
+    }
+    
+    
+  }
+  
   private func convertToMessageLog(_ origin: [String: Any]) -> BasicMessageModel {
     let id = origin["m_chatid"] as? String ?? "chatID"
-//    let delta = (origin["m_messageDate"] as? [String: Any])?["time"] as? Int ?? 0
-//    let offset = (origin["m_messageDate"] as? [String: Any])?["timezoneOffset"] as? Int ?? 0
+    //    let delta = (origin["m_messageDate"] as? [String: Any])?["time"] as? Int ?? 0
+    //    let offset = (origin["m_messageDate"] as? [String: Any])?["timezoneOffset"] as? Int ?? 0
     let date = origin["m_messageDate"] as? [String: Any] ?? [:]
     let messageId = origin["m_messageId"] as? String ?? "mID"
     let type = origin["m_messageType"] as? String
@@ -136,7 +219,7 @@ class NewChatVC: MessagesViewController {
     let unread = origin["m_unreadCount"] as? Int
     let message = origin["message"] as? String
     let tm = origin["tm_int"] as? Int
-//    print(message, delta, offset)
+    //    print(message, delta, offset)
     
     let clearMsg = message == nil ? "fail" : Secu.rity.decryptionMsg(message!, AESKey: self.aesKey) ?? "fail"
     
@@ -163,17 +246,20 @@ class NewChatVC: MessagesViewController {
   
   
   // 보낸기록이 있는지 확인
-//  private func getChatLog(chatID: String, completion: @escaping ([String: [String: Any]]) -> ()) {
-//    DatabaseManager.shared.getChatLog(id: chatID, completion: completion)
-//
-//  }
+  //  private func getChatLog(chatID: String, completion: @escaping ([String: [String: Any]]) -> ()) {
+  //    DatabaseManager.shared.getChatLog(id: chatID, completion: completion)
+  //
+  //  }
   
   private func getChatLogAdded(chatID: String, completion: @escaping (BasicMessageModel) -> ()) {
-    let trash = DatabaseManager.shared.getChatLogAdded(id: chatID) { [weak self] in
-      guard let `self` = self else { return }
-      completion(self.convertToMessageLog($0))
+    DatabaseManager.shared.getChatLogCount(id: chatID) {
+      self.totalMsgCount = $0
+      let trash = DatabaseManager.shared.getChatLogAdded(id: chatID) { [weak self] in
+        guard let `self` = self else { return }
+        completion(self.convertToMessageLog($0))
+      }
+      self.trashBin.append(trash)
     }
-    self.trashBin.append(trash)
   }
   
   private func getChatLogChanged(chatID: String) {
@@ -229,7 +315,7 @@ class NewChatVC: MessagesViewController {
     }
   }
   
-
+  
   
   func configureMessageInputBar() {
     messageInputBar.middleContentViewPadding = UIEdgeInsets(top: 0.i, left: 0.i, bottom: 0.i, right: 10.i)
@@ -254,7 +340,7 @@ class NewChatVC: MessagesViewController {
   
   
   private func configureInputBarItems() {
-//    setupInputButton()
+    setupInputButton()
     messageInputBar.setRightStackViewWidthConstant(to: 38.i, animated: false)
     messageInputBar.sendButton.contentEdgeInsets = UIEdgeInsets(top: 0.i, left: 0.i, bottom: 0.i, right: 0.i)
     messageInputBar.sendButton.setSize(CGSize(width: 36.i, height: 36.i), animated: false)
@@ -274,6 +360,17 @@ class NewChatVC: MessagesViewController {
     
   }
   
+  func isTimeLabelVisible(at indexPath: IndexPath) -> Bool {
+    guard messageLog.indices.contains(indexPath.section - 1) else { return false }
+    return messageLog[indexPath.section].sentDate.getDay() != messageLog[indexPath.section - 1].sentDate.getDay()
+    //    return indexPath.section % 3 == 0 && !isPreviousMessageSameSender(at: indexPath)
+  }
+  
+  //  func isPreviousMessageSameSender(at indexPath: IndexPath) -> Bool {
+  //    guard indexPath.section - 1 >= 0 else { return false }
+  //    return messageLog[indexPath.section].sender.senderId == messageLog[indexPath.section - 1].sender.senderId
+  //  }
+  
   
   private func configureInputBarPadding() {
     // Entire InputBar padding 전체 InputBar 패딩 - send버튼이랑 글자 사이 간격
@@ -290,7 +387,6 @@ class NewChatVC: MessagesViewController {
     messageInputBar.sendButton.contentMode = .scaleAspectFill
     
   }
-  var isCount = false
   
   private func setupInputButton() {
     messageInputBar.leftStackView.isUserInteractionEnabled = true
@@ -301,77 +397,34 @@ class NewChatVC: MessagesViewController {
     button.setImage(UIImage(named: "xbtn"), for: .selected)
     button.clipsToBounds = true
     button.contentMode = .scaleAspectFill
-
+    
     button.onTouchUpInside { [weak self] btn in
+      guard let `self` = self else { return }
+      guard let target = self.messageInputBar.superview?.frame.origin.y else { return }
+      let inputBarHeight = self.messageInputBar.frame.height
       btn.isSelected.toggle()
       if btn.isSelected {
-        self?.scrollsToBottomOnKeyboardBeginsEditing = true
-        self?.maintainPositionOnKeyboardFrameChanged = true
-
-        self?.configureMessageInputBarForChat(btn)
-//        self?.messageInputBar.inputTextView.becomeFirstResponder()
-        print("버튼 클릭했음 true")
-//        btn.onSelected { [weak self] (b) in
-//          self?.messageInputBar.inputTextView.resignFirstResponder()
-//          print("onSelected안에 true")
-//        }
-    
-
+        self.configureMessageInputBarForChat(btn)
       } else {
-        self?.scrollsToBottomOnKeyboardBeginsEditing = true
-        self?.maintainPositionOnKeyboardFrameChanged = true
-        self?.hideMessageInputBarForChat(btn)
-//        self?.messageInputBar.inputTextView.becomeFirstResponder()
-        print("버튼 클릭했음 false")
-//        btn.onSelected { [weak self] (b) in
-//          self?.messageInputBar.inputTextView.resignFirstResponder()
-//          print("onSelected안에 false")
-//        }
-
-
+        self.hideMessageInputBarForChat(btn)
       }
-
+      
+      if target <= self.keyboardY - inputBarHeight {
+        self.messageInputBar.inputTextView.becomeFirstResponder()
+      } else {
+        self.messageInputBar.inputTextView.resignFirstResponder()
+      }
     }
-
+    
     
     messageInputBar.setLeftStackViewWidthConstant(to: 25.i, animated: false)
     messageInputBar.setStackViewItems([button], forStack: .left, animated: false)
     
   }
-  public var items: [InputItem] {
-    return [messageInputBar.leftStackViewItems, messageInputBar.rightStackViewItems, messageInputBar.bottomStackViewItems, messageInputBar.topStackViewItems, messageInputBar.nonStackViewItems].flatMap { $0 }
-  }
   
-  @objc func keyboardWillShow(notification: NSNotification) {
-    isKeyboardHidden = false
-    guard let keyboardNotification = KeyboardNotification(from: notification) else { return }
-    callbacks[.willShow]?(keyboardNotification)
-    
-  }
-  
-  @objc func keyboardWillHide(notification: NSNotification) {
-    guard let keyboardNotification = KeyboardNotification(from: notification) else { return }
-    callbacks[.willHide]?(keyboardNotification)
-    
-  }
-  
-  
-  @objc func keyboardWillChangeFrame(notification: NSNotification) {
-      guard let keyboardNotification = KeyboardNotification(from: notification) else { return }
-      callbacks[.willChangeFrame]?(keyboardNotification)
-      cachedNotification = keyboardNotification
-
-  }
-  @objc open func inputTextViewDidBeginEditing() {
-    items.forEach { $0.keyboardEditingBeginsAction() }
-//    messageInputBar.inputTextView.becomeFirstResponder()
-  }
-
   
   // add버튼 눌렀을때 action
   @objc private func configureMessageInputBarForChat(_ sender: UIButton) {
-    
-    
     messageInputBar.setMiddleContentView(messageInputBar.inputTextView, animated: false)
     
     let bottomItems = [makeButton(named: "album"), makeButton(named: "camera"), makeButton(named: "file"), .flexibleSpace]
@@ -410,7 +463,7 @@ class NewChatVC: MessagesViewController {
     messageInputBar.middleContentViewPadding.bottom = 0
     messageInputBar.setMiddleContentView(messageInputBar.inputTextView, animated: false)
     messageInputBar.setStackViewItems([], forStack: .bottom, animated: false)
-          
+    
   }
   
   @objc func didTapAlbumIV() {
@@ -436,6 +489,8 @@ class NewChatVC: MessagesViewController {
   
   @objc func didTapFileIV() {
     print("didTapFileIV")
+    let callRingingVC = CallRingingVC()
+    navigationController?.pushViewController(callRingingVC, animated: true)
     
   }
   
@@ -444,6 +499,14 @@ class NewChatVC: MessagesViewController {
       self.view.endEditing(true)
     }
     sender.cancelsTouchesInView = false
+  }
+  
+  func setGradientBackground(colorTop: UIColor, colorBottom: UIColor, view: UIView) {
+    let gradientLayer = CAGradientLayer()
+    gradientLayer.colors = [colorTop.cgColor, colorBottom.cgColor,]
+    gradientLayer.locations = [0, 1]
+    gradientLayer.frame = CGRect(x: 0, y: 0, width: 38.i, height: 38.i)
+    view.layer.insertSublayer(gradientLayer, at: 0)
   }
   
   private func setupNavi() {
@@ -456,6 +519,7 @@ class NewChatVC: MessagesViewController {
     navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "NanumSquareR", size: 15.i) ?? UIFont()]
     
     navigationController?.navigationBar.shadowImage = UIImage()
+    navigationController?.navigationBar.isTranslucent = false
     navigationController?.navigationBar.barTintColor = .appColor(.whiteTwo)
   }
   
@@ -466,7 +530,10 @@ class NewChatVC: MessagesViewController {
   
   
   @objc func rightBtnDidTap(_ sender: UIButton) {
-    print("번역")
+    let languageSettingVC = LanguageSettingVC()
+    languageSettingVC.title = "Language Setting"
+    languageSettingVC.newChatVC = self
+    navigationController?.pushViewController(languageSettingVC, animated: true)
   }
   
   override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -530,7 +597,7 @@ extension NewChatVC: InputBarAccessoryViewDelegate {
     
   }
   
-
+  
   
 }
 
@@ -557,6 +624,25 @@ extension NewChatVC: MessagesDataSource, MessagesLayoutDelegate, MessagesDisplay
   
   func numberOfSections(in messagesCollectionView: MessagesCollectionView) -> Int {
     return messageLog.count
+  }
+  
+  func cellTopLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
+    if isTimeLabelVisible(at: indexPath) {
+      let date = message.sentDate.getDateStr()
+      return NSAttributedString(string: date, attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 11.i), NSAttributedString.Key.foregroundColor: UIColor.appColor(.gr2), NSAttributedString.Key.baselineOffset: 8.i])
+    }
+    return nil
+  }
+  
+  func cellTopLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
+    if isTimeLabelVisible(at: indexPath) {
+      return 17.i + 20.i
+    }
+    return 0
+  }
+  
+  func cellTopLabelAlignment(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> LabelAlignment {
+    return LabelAlignment(textAlignment: .center, textInsets: UIEdgeInsets(top: 0, left: 0, bottom: 20.i, right: 0))
   }
   
   func messageTopLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
@@ -600,7 +686,7 @@ extension NewChatVC: MessagesDataSource, MessagesLayoutDelegate, MessagesDisplay
     
     return attri
   }
-
+  
   
   func messageBottomLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
     guard indexPath.section == self.messageLog.count - 1 else { return 0 }
@@ -746,11 +832,10 @@ extension NewChatVC: MessageCellDelegate {
   //  }
   
 }
- 
+
 // UIImagePickerControllerDelegate
 extension NewChatVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
   func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-    print("dismiss")
     picker.dismiss(animated: true, completion: nil)
   }
   
@@ -761,7 +846,7 @@ extension NewChatVC: UIImagePickerControllerDelegate, UINavigationControllerDele
     if let image = info[.editedImage] as? UIImage, let imageData =  image.pngData() {
       let fileName = "photo_message_" + chatID.replacingOccurrences(of: " ", with: "-") + ".png"
       
-    
+      
       StorageManager.shared.uploadMessagePhoto(with: imageData, fileName: fileName) { [weak self] res in
         guard let `self` = self else { return }
         switch res {
@@ -786,75 +871,42 @@ extension NewChatVC: UIImagePickerControllerDelegate, UINavigationControllerDele
 }
 
 extension NewChatVC {
-    @objc func keyboardWillChange(_ sender: Notification) {
-      if let keyboardFrame: NSValue = sender.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
-        let keyboardRect = keyboardFrame.cgRectValue
-        let keyboardHeight = keyboardRect.height
-        let duration = sender.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as! Double
-        print("keyboardWillChange ㅇㅅㅇ")
-//        messageInputBar.inputTextView.resignFirstResponder()
-
+  @objc func keyboardWillChange(_ sender: Notification) {
+    if let keyboardFrame: NSValue = sender.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+      let keyboardRect = keyboardFrame.cgRectValue
+      let keyboardHeight = keyboardRect.height
+      if keyboardHeight != 0 {
+        self.keyboardY = keyboardRect.origin.y
+      }
+    }
+    
+  }
+  
+  @objc func keyboardWillShow(_ sender: Notification) {
+    if let keyboardFrame: NSValue = sender.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+      let keyboardRect = keyboardFrame.cgRectValue
+      let keyboardHeight = keyboardRect.height
+      let duration = sender.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as! Double
       
-        
+      UIView.animate(withDuration: duration) { [weak self] in
+        guard let `self` = self else { return }
+        self.view.layoutIfNeeded()
       }
       
     }
     
-    @objc func keyboardWillShow(_ sender: Notification) {
-      if let keyboardFrame: NSValue = sender.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
-        let keyboardRect = keyboardFrame.cgRectValue
-        let keyboardHeight = keyboardRect.height
-        let duration = sender.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as! Double
-        
-        print("keyboardWillShow")
-        print("basic: ", keyboardHeight)    // +일때 키보드 높이 기본
-        print("inputBar height: ", messageInputBar.inputTextView.frame.height)
-        print("minus: ", keyboardHeight - messageInputBar.inputTextView.frame.height)
-        let minus = keyboardHeight - messageInputBar.inputTextView.frame.height
-        
-        
-        if minus == 289.0 {
-          print("기본 카메라있는 인풋바")
-          messageInputBar.inputTextView.becomeFirstResponder()
-        } else if minus  == 230.0 {
-          print("기본 플럿" )
-          // plus누르면
-          messageInputBar.inputTextView.becomeFirstResponder()
-        } else {
-          messageInputBar.inputTextView.resignFirstResponder()
-        }
-        
-//        messageInputBar.inputTextView.snp.remakeConstraints {
-//           $0.leading.trailing.equalToSuperview()
-//           $0.bottom.equalToSuperview().offset(-keyboardHeight)
-//           $0.height.equalTo(54.i)
-//         }
-        
-        UIView.animate(withDuration: duration) { [weak self] in
-          guard let `self` = self else { return }
-          self.view.layoutIfNeeded()
-        }
-        
+  }
+  
+  @objc func keyboardWillHide(_ sender: Notification) {
+    if let _: NSValue = sender.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+      let duration = sender.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as! Double
+      
+      UIView.animate(withDuration: duration) { [weak self] in
+        guard let `self` = self else { return }
+        self.view.layoutIfNeeded()
       }
       
     }
     
-    @objc func keyboardWillHide(_ sender: Notification) {
-      if let _: NSValue = sender.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
-        let duration = sender.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as! Double
-        print("keyboardWillHide")
-
-//        messageInputBar.inputTextView.snp.remakeConstraints {
-//          $0.bottom.leading.trailing.equalToSuperview()
-//          $0.height.equalTo(54.i)
-//         }
-        
-        UIView.animate(withDuration: duration) { [weak self] in
-          guard let `self` = self else { return }
-          self.view.layoutIfNeeded()
-        }
-        
-      }
-      
-    }
+  }
 }

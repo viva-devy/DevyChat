@@ -51,6 +51,8 @@ enum AssetsColor {
   case darkPeriwinkle   // 없음
   case brownGrayTwo
   case perryWinkle
+  case deepLilac
+  case deepDusk
 }
 
 extension UIColor {
@@ -136,6 +138,10 @@ extension UIColor {
       return UIColor(red: 151 / 255.0, green: 151 / 255.0, blue: 151 / 255.0, alpha: alpha ?? 1.0)
     case .perryWinkle:
       return UIColor(red: 147.0 / 255.0, green: 138.0 / 255.0, blue: 215.0 / 255.0, alpha: 1.0)
+    case .deepLilac:
+      return UIColor(red: 139 / 255.0, green: 128 / 255.0, blue: 181 / 255.0, alpha: 1.0)
+    case .deepDusk:
+      return UIColor(red: 77 / 255.0, green: 82 / 255.0, blue: 132 / 255.0, alpha: 1.0)
     }
   }
 }
